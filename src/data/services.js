@@ -258,4 +258,16 @@ export const homepageServiceSlugs = [
   "virtual-staging",
 ];
 
+// A smaller curated subset used as the quick-switcher pills on every
+// ServiceDetail page's "One photo. Two outcomes." comparison section -
+// deliberately not the full catalog, so the pill row stays a manageable
+// handful of common categories rather than all ten services.
+export const comparisonShowcaseSlugs = [
+  "interior-retouching",
+  "twilight",
+  "object-removal",
+  "sky-grass-pool",
+  "day-to-dusk",
+];
+
 export const getServiceBySlug = (slug) => services.find((s) => s.slug === slug);

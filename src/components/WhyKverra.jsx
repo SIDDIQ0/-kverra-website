@@ -81,7 +81,7 @@ export function WhyKverra() {
         ref={accentLayerRef}
         aria-hidden="true"
         className="absolute -right-24 top-10 -z-10 h-[420px] w-[420px] rounded-full opacity-30 blur-3xl"
-        style={{ background: "radial-gradient(circle, rgba(201,164,92,0.4), transparent 70%)" }}
+        style={{ background: "radial-gradient(circle, rgba(37,99,235,0.4), transparent 70%)" }}
       />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -90,7 +90,7 @@ export function WhyKverra() {
             as="h2"
             text="Why brokerages choose Kverra."
             emphasize="Kverra"
-            emphasisClassName="text-gold-600 italic"
+            emphasisClassName="text-blue-600 italic"
             className="font-display text-4xl font-semibold tracking-tight text-ink-900 sm:text-5xl"
           />
           <p className="mt-5 max-w-md text-base leading-relaxed text-secondary-500">
@@ -102,7 +102,7 @@ export function WhyKverra() {
         <div ref={cardsRef} className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {values.map((v) => (
             <div key={v.title} className="value-card glass-panel-light rounded-2xl p-6">
-              <span className="flex h-11 w-11 items-center justify-center rounded-full bg-gold-500/10 text-gold-600 ring-1 ring-gold-500/25">
+              <span className="flex h-11 w-11 items-center justify-center rounded-full bg-blue-500/10 text-blue-600 ring-1 ring-blue-500/25">
                 <v.icon size={20} weight="bold" />
               </span>
               <p className="mt-5 font-display text-lg font-semibold text-ink-900">{v.title}</p>

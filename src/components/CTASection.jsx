@@ -49,7 +49,7 @@ export function CTASection() {
       <div className="absolute inset-0 bg-gradient-to-b from-brand-950/90 via-brand-950/80 to-brand-950/95" />
 
       <div ref={ref} className="relative mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
-        <div className="gold-rule mx-auto w-16" />
+        <div className="accent-rule mx-auto w-16" />
         <WordReveal
           as="h2"
           text="Ready to make your listings look their best?"

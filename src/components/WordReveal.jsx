@@ -7,12 +7,12 @@ gsap.registerPlugin(ScrollTrigger);
 /**
  * Splits `text` into words, each masked in its own overflow-hidden box, and
  * slides them up into place word by word. `emphasize` (optional) renders a
- * single matching word in italic gold, matching the site's headline style.
+ * single matching word in italic blue, matching the site's headline style.
  */
 export function WordReveal({
   text,
   emphasize,
-  emphasisClassName = "text-gold-400 italic",
+  emphasisClassName = "text-blue-400 italic",
   as: Tag = "h2",
   className = "",
   trigger = "scroll",

@@ -20,11 +20,11 @@ export function FeaturedTransformations() {
     <section className="relative overflow-hidden bg-paper-100 py-24 sm:py-28">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-24 left-1/2 -z-10 h-[420px] w-[720px] -translate-x-1/2 rounded-full bg-gold-500/15 blur-[120px]"
+        className="pointer-events-none absolute -top-24 left-1/2 -z-10 h-[420px] w-[720px] -translate-x-1/2 rounded-full bg-blue-500/15 blur-[120px]"
       />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div ref={headerRef} className="max-w-2xl">
-          <p className="flex items-center gap-2 text-xs font-semibold tracking-[0.25em] text-gold-600 uppercase">
+          <p className="flex items-center gap-2 text-xs font-semibold tracking-[0.25em] text-blue-600 uppercase">
             <FilmSlate size={16} weight="bold" />
             The showreel
           </p>
@@ -32,7 +32,7 @@ export function FeaturedTransformations() {
             as="h2"
             text="Recent transformations."
             emphasize="transformations"
-            emphasisClassName="text-gold-600 italic"
+            emphasisClassName="text-blue-600 italic"
             className="mt-4 font-display text-4xl font-semibold tracking-tight text-ink-900 sm:text-5xl"
           />
           <p className="mt-4 max-w-md text-base leading-relaxed text-secondary-500">

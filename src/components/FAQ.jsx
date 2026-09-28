@@ -36,7 +36,7 @@ export function FAQ() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div ref={headerRef} className="max-w-2xl">
           <h2 className="font-display text-4xl font-semibold tracking-tight text-ink-900 sm:text-5xl">
-            Questions, <em className="text-gold-600">answered</em>.
+            Questions, <em className="text-blue-600">answered</em>.
           </h2>
         </div>
 

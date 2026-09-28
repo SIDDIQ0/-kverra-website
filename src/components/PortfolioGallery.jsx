@@ -33,7 +33,7 @@ export function PortfolioGallery({ limit, showHeading = true, showViewAll = fals
         {showHeading && (
           <div ref={headerRef} className="flex flex-wrap items-end justify-between gap-6">
             <h2 className="font-display text-4xl font-semibold tracking-tight text-ink-900 sm:text-5xl">
-              A glimpse of the <em className="not-italic text-gold-600">edits</em>.
+              A glimpse of the <em className="not-italic text-blue-600">edits</em>.
             </h2>
             {showViewAll && (
               <Link

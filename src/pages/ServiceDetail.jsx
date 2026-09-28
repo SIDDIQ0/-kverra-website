@@ -14,11 +14,12 @@ import {
   Armchair,
   CloudSun,
   ArrowRight,
+  ArrowsLeftRight,
   CaretRight,
   CheckCircle,
   Clock,
 } from "@phosphor-icons/react";
-import { services, getServiceBySlug } from "../data/services";
+import { services, getServiceBySlug, comparisonShowcaseSlugs } from "../data/services";
 import { whatsappLink } from "../data/site";
 import { BeforeAfterSlider } from "../components/BeforeAfterSlider";
 import { CTASection } from "../components/CTASection";
@@ -53,9 +54,7 @@ export function ServiceDetail() {
   const ctaRef = useMagnetic(0.2);
   const heroSectionRef = useRef(null);
   const heroImgRef = useRef(null);
-  const bgPhotoRef = useRef(null);
   const blobRef = useRef(null);
-  const blobBlueRef = useRef(null);
 
   useEffect(() => {
     if (service) document.title = `${service.name} | Kverra Infotech`;
@@ -66,17 +65,8 @@ export function ServiceDetail() {
     if (reduce || !heroSectionRef.current) return undefined;
 
     const ctx = gsap.context(() => {
-      // Layered parallax: the blurred backdrop photo, the two colour blobs
-      // and the sharp sample image all drift at different speeds.
-      gsap.fromTo(
-        bgPhotoRef.current,
-        { y: -20 },
-        {
-          y: 35,
-          ease: "none",
-          scrollTrigger: { trigger: heroSectionRef.current, start: "top top", end: "bottom top", scrub: true },
-        }
-      );
+      // Two restrained layers - the sharp hero sample and one soft ambient
+      // blob - drift at slightly different speeds behind the light hero.
       gsap.fromTo(
         heroImgRef.current,
         { y: -24 },
@@ -90,18 +80,8 @@ export function ServiceDetail() {
         blobRef.current,
         { y: -30, x: -10 },
         {
-          y: 55,
+          y: 45,
           x: 15,
-          ease: "none",
-          scrollTrigger: { trigger: heroSectionRef.current, start: "top top", end: "bottom top", scrub: true },
-        }
-      );
-      gsap.fromTo(
-        blobBlueRef.current,
-        { y: 25, x: 10 },
-        {
-          y: -60,
-          x: -20,
           ease: "none",
           scrollTrigger: { trigger: heroSectionRef.current, start: "top top", end: "bottom top", scrub: true },
         }
@@ -114,63 +94,52 @@ export function ServiceDetail() {
 
   const Icon = icons[service.icon];
   const related = services.filter((s) => s.slug !== service.slug).slice(0, 3);
+  const showcase = comparisonShowcaseSlugs.map(getServiceBySlug).filter(Boolean);
 
   return (
     <>
       <section
         ref={heroSectionRef}
-        className="relative overflow-hidden bg-brand-950 pt-16 pb-20 sm:pt-24"
+        className="relative overflow-hidden bg-paper-50 pt-16 pb-20 sm:pt-24"
       >
-        <div ref={bgPhotoRef} aria-hidden="true" className="absolute inset-0 -z-30">
-          <img
-            src={service.heroImage}
-            alt=""
-            className="h-[130%] w-full scale-110 object-cover opacity-45 blur-2xl"
-          />
-        </div>
-        <div className="absolute inset-0 -z-20 bg-gradient-to-b from-brand-950/75 via-brand-950/80 to-brand-950" />
+        {/* One understated ambient blob rather than a full dark backdrop -
+            "clean premium depth", not a flashy gradient background. */}
         <div
           ref={blobRef}
           aria-hidden="true"
-          className="pointer-events-none absolute -right-20 top-0 -z-10 h-[420px] w-[420px] rounded-full opacity-30 blur-3xl"
-          style={{ background: "radial-gradient(circle, rgba(201,164,92,0.55), transparent 70%)" }}
-        />
-        <div
-          ref={blobBlueRef}
-          aria-hidden="true"
-          className="pointer-events-none absolute -left-24 bottom-0 -z-10 h-[380px] w-[380px] rounded-full opacity-25 blur-3xl"
-          style={{ background: "radial-gradient(circle, rgba(226,196,119,0.5), transparent 70%)" }}
+          className="pointer-events-none absolute -right-24 top-0 -z-10 h-[420px] w-[420px] rounded-full opacity-40 blur-3xl"
+          style={{ background: "radial-gradient(circle, rgba(37,99,235,0.16), transparent 70%)" }}
         />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-white/50">
-            <Link to="/" className="transition-colors hover:text-white">Home</Link>
+          <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-secondary-500">
+            <Link to="/" className="transition-colors hover:text-ink-900">Home</Link>
             <CaretRight size={10} weight="bold" />
-            <Link to="/services" className="transition-colors hover:text-white">Services</Link>
+            <Link to="/services" className="transition-colors hover:text-ink-900">Services</Link>
             <CaretRight size={10} weight="bold" />
-            <span className="text-gold-300">{service.name}</span>
+            <span className="text-blue-600">{service.name}</span>
           </nav>
 
           <div ref={headerRef} className="mt-8 grid gap-10 lg:grid-cols-2 lg:items-center">
             <div>
-              <span className="glass-panel flex h-12 w-12 items-center justify-center rounded-full text-gold-400">
+              <span className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-500/10 text-blue-600 ring-1 ring-blue-500/20">
                 {Icon && <Icon size={22} weight="bold" />}
               </span>
               <WordReveal
                 as="h1"
                 text={service.name}
                 trigger="load"
-                className="mt-5 font-display text-4xl font-semibold tracking-tight text-white sm:text-5xl"
+                className="mt-5 font-display text-4xl font-semibold tracking-tight text-ink-900 sm:text-5xl"
               />
-              <p className="mt-4 max-w-md text-base leading-relaxed text-white/70">
+              <p className="mt-4 max-w-md text-base leading-relaxed text-secondary-500">
                 {service.description}
               </p>
               <div className="mt-6 flex flex-wrap items-center gap-4">
-                <div className="glass-panel rounded-xl px-4 py-2.5">
-                  <p className="font-display text-lg font-semibold text-gold-400">
-                    ${service.price} <span className="text-xs font-normal text-white/50">/ image</span>
+                <div className="rounded-xl bg-blue-500/5 px-4 py-2.5 ring-1 ring-blue-500/15">
+                  <p className="font-display text-lg font-semibold text-blue-600">
+                    ${service.price} <span className="text-xs font-normal text-secondary-500">/ image</span>
                   </p>
                 </div>
-                <div className="flex items-center gap-1.5 text-sm text-white/60">
+                <div className="flex items-center gap-1.5 text-sm text-secondary-500">
                   <Clock size={16} weight="bold" />
                   {service.delivery}
                 </div>
@@ -187,7 +156,7 @@ export function ServiceDetail() {
               </a>
             </div>
 
-            <div className="h-[320px] overflow-hidden rounded-[1.75rem] ring-1 ring-gold-400/25 shadow-2xl shadow-brand-950/40 sm:h-[380px]">
+            <div className="h-[320px] overflow-hidden rounded-[1.75rem] shadow-xl shadow-brand-900/10 ring-1 ring-blue-500/10 sm:h-[380px]">
               <BlurImage
                 ref={heroImgRef}
                 src={service.heroImage}
@@ -204,16 +173,63 @@ export function ServiceDetail() {
           <div className="grid gap-12 lg:grid-cols-[1.3fr_1fr]">
             <div>
               <h2 className="font-display text-3xl font-semibold tracking-tight text-ink-900">
-                See the <em className="text-gold-600">difference</em>
+                One photo. <em className="text-blue-600">Two outcomes.</em>
               </h2>
-              <p className="mt-2 max-w-md text-sm leading-relaxed text-ink-900/60">
-                Drag the handle to compare the raw file against the delivered edit.
+              <p className="mt-2 max-w-md text-sm leading-relaxed text-secondary-500">
+                Drag the handle to compare the raw file against the delivered
+                edit for {service.name.toLowerCase()}.
               </p>
-              <BeforeAfterSlider
-                before={service.image}
-                after={service.image}
-                className="mt-6 shadow-2xl shadow-brand-950/15"
-              />
+
+              <div className="mt-6 flex gap-2 overflow-x-auto pb-2 sm:flex-wrap">
+                {showcase.map((s) =>
+                  s.slug === service.slug ? (
+                    <span
+                      key={s.slug}
+                      className="shrink-0 rounded-full bg-blue-500 px-5 py-2.5 text-sm font-semibold text-white shadow-[0_10px_24px_-12px_rgba(37,99,235,0.6)]"
+                    >
+                      {s.name}
+                    </span>
+                  ) : (
+                    <Link
+                      key={s.slug}
+                      to={`/services/${s.slug}`}
+                      className="shrink-0 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-ink-900/80 ring-1 ring-blue-500/20 transition-colors hover:bg-blue-500/5 hover:ring-blue-500/40"
+                    >
+                      {s.name}
+                    </Link>
+                  )
+                )}
+              </div>
+
+              {/* One elevated card owns the whole comparison demonstration -
+                  the slider plus its info card read as a single premium
+                  product showcase rather than a raw image dropped on the
+                  page. The info card floats over the slider's corner at
+                  `lg:` and becomes a normal stacked card below it on
+                  smaller screens, where floating would feel cramped. */}
+              <div className="relative mt-6 rounded-3xl bg-white p-3 shadow-xl shadow-brand-900/10 ring-1 ring-blue-500/10 sm:p-4">
+                <BeforeAfterSlider before={service.image} after={service.image} />
+
+                <div className="relative z-10 mt-4 rounded-2xl bg-paper-100 p-6 ring-1 ring-blue-500/10 lg:absolute lg:right-8 lg:bottom-8 lg:mt-0 lg:w-72 lg:bg-white lg:shadow-2xl lg:shadow-brand-900/15">
+                  <p className="text-[10px] font-semibold tracking-[0.2em] text-blue-600 uppercase">
+                    Listing ready
+                  </p>
+                  <p className="mt-2 font-display text-lg font-semibold text-ink-900">
+                    {service.name}
+                  </p>
+                  <p className="mt-1.5 text-sm leading-relaxed text-secondary-500">
+                    {service.tagline}
+                  </p>
+                  <p className="mt-3 text-xs leading-relaxed text-secondary-500">
+                    Delivered as print-ready JPEG or TIFF, colour matched
+                    across the full set.
+                  </p>
+                  <div className="mt-4 flex items-center gap-1.5 text-xs font-semibold text-blue-600">
+                    <ArrowsLeftRight size={14} weight="bold" />
+                    Drag to compare
+                  </div>
+                </div>
+              </div>
 
               <div className="mt-10 grid gap-4 sm:grid-cols-2">
                 {service.gallery.map((src, i) => (
@@ -230,21 +246,21 @@ export function ServiceDetail() {
             </div>
 
             <div className="space-y-8">
-              <div className="rounded-2xl bg-brand-950 p-8 text-white">
-                <p className="font-display text-lg font-semibold text-gold-400">
+              <div className="rounded-2xl bg-paper-100 p-8 ring-1 ring-blue-500/10">
+                <p className="font-display text-lg font-semibold text-blue-600">
                   What is included
                 </p>
                 <ul className="mt-4 space-y-3 text-sm">
                   {service.whatsIncluded.map((item) => (
-                    <li key={item} className="flex items-start gap-2.5 text-white/80">
-                      <CheckCircle size={18} weight="fill" className="mt-0.5 shrink-0 text-gold-400" />
+                    <li key={item} className="flex items-start gap-2.5 text-ink-900/75">
+                      <CheckCircle size={18} weight="fill" className="mt-0.5 shrink-0 text-blue-600" />
                       {item}
                     </li>
                   ))}
                 </ul>
               </div>
 
-              <div className="rounded-2xl border border-brand-900/10 p-8">
+              <div className="rounded-2xl border border-blue-500/10 p-8">
                 <p className="font-display text-lg font-semibold text-ink-900">
                   {service.faq.q}
                 </p>
@@ -280,7 +296,7 @@ export function ServiceDetail() {
                     />
                   </div>
                   <div className="p-5">
-                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gold-500/10 text-gold-600">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500/10 text-blue-600">
                       {RelatedIcon && <RelatedIcon size={16} weight="bold" />}
                     </span>
                     <p className="mt-3 font-display text-base font-semibold text-ink-900">

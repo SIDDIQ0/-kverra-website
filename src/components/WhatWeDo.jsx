@@ -22,7 +22,7 @@ export function WhatWeDo() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div ref={headerRef} className="max-w-2xl">
           <h2 className="font-display text-4xl font-semibold tracking-tight text-ink-900 sm:text-5xl">
-            This is what we <em className="text-gold-600">do</em>.
+            One photo, two <em className="text-blue-600">outcomes</em>.
           </h2>
           <p className="mt-4 max-w-md text-base leading-relaxed text-ink-900/65">
             Drag the handle. Same photo, two lives: the raw camera file on the
@@ -61,9 +61,9 @@ export function WhatWeDo() {
               full set so a whole listing feels shot in one session.
             </p>
             <div className="mt-6 flex items-center gap-3 text-sm text-white/60">
-              <span className="h-px flex-1 bg-gold-400/30" />
+              <span className="h-px flex-1 bg-blue-400/30" />
               <span>Drag anywhere on the photo</span>
-              <span className="h-px flex-1 bg-gold-400/30" />
+              <span className="h-px flex-1 bg-blue-400/30" />
             </div>
           </div>
         </div>

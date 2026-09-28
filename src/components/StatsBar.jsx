@@ -51,8 +51,8 @@ export function StatsBar() {
   }, []);
 
   return (
-    <section ref={ref} className="border-y border-gold-500/15 bg-paper-100 py-14">
-      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-8 px-4 sm:px-6 lg:grid-cols-4 lg:gap-0 lg:divide-x lg:divide-gold-500/20 lg:px-8">
+    <section ref={ref} className="border-y border-blue-500/15 bg-paper-100 py-14">
+      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-8 px-4 sm:px-6 lg:grid-cols-4 lg:gap-0 lg:divide-x lg:divide-blue-500/20 lg:px-8">
         {stats.map((s) => (
           <div key={s.label} className="text-center lg:px-8 lg:text-left first:lg:pl-0">
             <p className="font-display text-4xl font-semibold text-brand-800 sm:text-5xl">

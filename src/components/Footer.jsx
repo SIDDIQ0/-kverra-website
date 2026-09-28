@@ -35,7 +35,7 @@ export function Footer() {
           </div>
 
           <div>
-            <p className="text-sm font-semibold text-gold-400">Services</p>
+            <p className="text-sm font-semibold text-blue-400">Services</p>
             <ul className="mt-4 space-y-2.5 text-sm">
               {services.slice(0, 5).map((s) => (
                 <li key={s.slug}>
@@ -53,7 +53,7 @@ export function Footer() {
           </div>
 
           <div>
-            <p className="text-sm font-semibold text-gold-400">Company</p>
+            <p className="text-sm font-semibold text-blue-400">Company</p>
             <ul className="mt-4 space-y-2.5 text-sm">
               <li><Link to="/" className="transition-colors hover:text-white">Home</Link></li>
               <li><a href="/#what-we-do" className="transition-colors hover:text-white">What we do</a></li>
@@ -63,7 +63,7 @@ export function Footer() {
           </div>
 
           <div>
-            <p className="text-sm font-semibold text-gold-400">Get in touch</p>
+            <p className="text-sm font-semibold text-blue-400">Get in touch</p>
             <ul className="mt-4 space-y-3 text-sm">
               <li>
                 <a
@@ -101,7 +101,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col gap-4 border-t border-gold-500/15 pt-6 text-xs text-white/40 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-14 flex flex-col gap-4 border-t border-blue-500/15 pt-6 text-xs text-white/40 sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} Kverra Infotech. All rights reserved.</p>
           <div className="flex gap-5">
             <Link to="/privacy-policy" className="transition-colors hover:text-white">Privacy policy</Link>

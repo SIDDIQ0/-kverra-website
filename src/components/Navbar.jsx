@@ -148,7 +148,7 @@ export function Navbar() {
   const servicesActive = location.pathname.startsWith("/services");
   const navLinkClass = ({ isActive }) =>
     `relative rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-      isActive ? "text-gold-600" : "text-ink-900/70 hover:bg-paper-100 hover:text-ink-900"
+      isActive ? "text-blue-600" : "text-ink-900/70 hover:bg-paper-100 hover:text-ink-900"
     }`;
 
   return (
@@ -160,7 +160,7 @@ export function Navbar() {
     <header
       ref={navRef}
       className={`sticky top-0 z-40 bg-paper-white transition-shadow duration-300 ${
-        scrolled ? "shadow-[0_1px_0_rgba(201,164,92,0.35),0_12px_24px_-18px_rgba(23,32,51,0.25)]" : "shadow-[0_1px_0_rgba(201,164,92,0.2)]"
+        scrolled ? "shadow-[0_1px_0_rgba(37,99,235,0.35),0_12px_24px_-18px_rgba(23,32,51,0.25)]" : "shadow-[0_1px_0_rgba(37,99,235,0.2)]"
       }`}
     >
       <nav className="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -178,7 +178,7 @@ export function Navbar() {
               data-services-trigger
               onClick={() => setServicesOpen((v) => !v)}
               className={`flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-                servicesActive ? "text-gold-600" : "text-ink-900/70 hover:bg-paper-100 hover:text-ink-900"
+                servicesActive ? "text-blue-600" : "text-ink-900/70 hover:bg-paper-100 hover:text-ink-900"
               }`}
               aria-expanded={servicesOpen}
             >
@@ -205,7 +205,7 @@ export function Navbar() {
                         onClick={closeAll}
                         className="flex items-start gap-3 rounded-xl p-3 transition-colors hover:bg-paper-100/80"
                       >
-                        <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gold-500/10 text-gold-600 ring-1 ring-gold-500/20">
+                        <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-500/10 text-blue-600 ring-1 ring-blue-500/20">
                           {Icon && <Icon size={18} weight="bold" />}
                         </span>
                         <span>
@@ -223,7 +223,7 @@ export function Navbar() {
                 <Link
                   to="/services"
                   onClick={closeAll}
-                  className="glass-panel-light mt-2 flex items-center justify-between rounded-xl px-4 py-3 text-sm font-semibold text-brand-900 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-gold-500 focus-visible:outline-offset-2"
+                  className="glass-panel-light mt-2 flex items-center justify-between rounded-xl px-4 py-3 text-sm font-semibold text-brand-900 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500 focus-visible:outline-offset-2"
                 >
                   View all services
                   <ArrowRight size={16} weight="bold" />
@@ -281,7 +281,7 @@ export function Navbar() {
               Home
             </Link>
 
-            <p className="mobile-link mt-4 px-3 text-xs font-semibold tracking-[0.2em] text-gold-400/70">
+            <p className="mobile-link mt-4 px-3 text-xs font-semibold tracking-[0.2em] text-blue-400/70">
               SERVICES
             </p>
             {services.map((s) => {
@@ -293,7 +293,7 @@ export function Navbar() {
                   onClick={closeAll}
                   className="mobile-link flex items-center gap-3 rounded-xl px-3 py-2.5 text-white/85"
                 >
-                  {Icon && <Icon size={18} weight="bold" className="text-gold-400" />}
+                  {Icon && <Icon size={18} weight="bold" className="text-blue-400" />}
                   {s.name}
                 </Link>
               );
@@ -301,7 +301,7 @@ export function Navbar() {
             <Link
               to="/services"
               onClick={closeAll}
-              className="mobile-link px-3 py-2.5 text-sm font-semibold text-gold-400"
+              className="mobile-link px-3 py-2.5 text-sm font-semibold text-blue-400"
             >
               View all services →
             </Link>

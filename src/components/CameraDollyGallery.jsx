@@ -32,13 +32,13 @@ function ReelFrame({ item, index }) {
           />
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-brand-950/95 via-brand-950/5 to-transparent" />
 
-          <span className="pointer-events-none absolute left-3 top-3 h-4 w-4 border-l border-t border-gold-400/0 transition-colors duration-500 group-hover:border-gold-400/70" />
-          <span className="pointer-events-none absolute right-3 top-3 h-4 w-4 border-r border-t border-gold-400/0 transition-colors duration-500 group-hover:border-gold-400/70" />
-          <span className="pointer-events-none absolute bottom-3 left-3 h-4 w-4 border-b border-l border-gold-400/0 transition-colors duration-500 group-hover:border-gold-400/70" />
-          <span className="pointer-events-none absolute bottom-3 right-3 h-4 w-4 border-b border-r border-gold-400/0 transition-colors duration-500 group-hover:border-gold-400/70" />
+          <span className="pointer-events-none absolute left-3 top-3 h-4 w-4 border-l border-t border-blue-400/0 transition-colors duration-500 group-hover:border-blue-400/70" />
+          <span className="pointer-events-none absolute right-3 top-3 h-4 w-4 border-r border-t border-blue-400/0 transition-colors duration-500 group-hover:border-blue-400/70" />
+          <span className="pointer-events-none absolute bottom-3 left-3 h-4 w-4 border-b border-l border-blue-400/0 transition-colors duration-500 group-hover:border-blue-400/70" />
+          <span className="pointer-events-none absolute bottom-3 right-3 h-4 w-4 border-b border-r border-blue-400/0 transition-colors duration-500 group-hover:border-blue-400/70" />
 
           <div className="absolute inset-x-0 bottom-0 p-5">
-            <p className="font-mono text-[11px] tracking-[0.25em] text-gold-400/80">
+            <p className="font-mono text-[11px] tracking-[0.25em] text-blue-400/80">
               {String(index + 1).padStart(2, "0")}
             </p>
             <p className="mt-1 font-display text-lg font-semibold text-white">{item.title}</p>

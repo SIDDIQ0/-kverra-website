@@ -110,7 +110,7 @@ export function HorizontalScrollbar({ targetRef, variant = "light" }) {
         ref={thumbRef}
         className="absolute top-0 left-0 flex h-6 w-16 cursor-grab items-center active:cursor-grabbing"
       >
-        <span className="block h-[3px] w-full rounded-full bg-gradient-to-r from-gold-500 to-gold-400 transition-[height] duration-200 ease-out group-hover/scrollbar:h-[5px] [.is-dragging_&]:h-[5px]" />
+        <span className="block h-[3px] w-full rounded-full bg-gradient-to-r from-blue-500 to-blue-400 transition-[height] duration-200 ease-out group-hover/scrollbar:h-[5px] [.is-dragging_&]:h-[5px]" />
       </div>
     </div>
   );

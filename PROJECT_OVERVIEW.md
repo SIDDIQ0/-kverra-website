@@ -33,7 +33,7 @@ shipped inside the JavaScript bundle.
 | Build tool | Vite | 6.0 | `@vitejs/plugin-react` for Fast Refresh |
 | Routing | React Router | 7.18 | `BrowserRouter`, client-side only |
 | Styling | Tailwind CSS | 4.0 | **CSS-first config** — no `tailwind.config.js` file at all. All theme tokens live in `src/index.css` inside an `@theme` block. Wired into Vite via the `@tailwindcss/vite` plugin. |
-| Animation | GSAP | 3.12 | `gsap` core + the `ScrollTrigger` plugin, used everywhere |
+| Animation | GSAP | 3.12 | `gsap` core + the `ScrollTrigger` plugin, used everywhere; the `Flip` plugin is also registered, used only by `LoadingScreen.jsx` to grow its photographic frame to fullscreen |
 | Smooth scroll | Lenis | 1.3 | One instance for the whole app, driven by GSAP's own ticker so it and ScrollTrigger never fall out of sync |
 | Icons | Phosphor Icons (`@phosphor-icons/react`) | 2.1 | A real icon library, not emoji or custom SVGs |
 | Fonts | `@fontsource/playfair-display`, `@fontsource/plus-jakarta-sans` | 5.x | Self-hosted via npm packages, not Google Fonts CDN |
@@ -210,7 +210,7 @@ wrapped around `gsap.context()` for automatic cleanup on unmount.
   into words, each masked in its own `overflow: hidden` box, and slides them
   up into place word-by-word (`yPercent: 110 → 0`) via a GSAP timeline with
   stagger. Takes an `emphasize="word"` prop that renders one matching word in
-  italic gold (first occurrence only). Can trigger either on scroll-in
+  italic blue (first occurrence only). Can trigger either on scroll-in
   (`trigger="scroll"`, the default) or immediately on mount
   (`trigger="load"`, used for above-the-fold hero/page headings so they
   animate in without needing a scroll). This is the mechanism behind almost
@@ -219,16 +219,22 @@ wrapped around `gsap.context()` for automatic cleanup on unmount.
 - **Parallax / layered depth**, hand-rolled per component with
   `gsap.fromTo(..., { scrollTrigger: { scrub: true } })` (i.e. the animation
   is tied directly to scroll position, not time):
-  - `Hero.jsx` — the two hero images (`.hero-image-main`,
-    `.hero-image-float`) drift at slightly different vertical rates as the
-    hero scrolls out of view, reading as separated depth layers rather than
-    a flat cutout.
-  - `WhyKverra.jsx` — a blurred background photo and a large blurred gold
+  - `Hero.jsx` — since the 2026 blue-and-white redesign, the hero is a
+    two-column layout (copy left, a 3-image collage right: one dominant
+    frame plus two smaller supporting frames in a `grid-cols-[1.6fr_1fr]
+    grid-rows-[1.5fr_1fr]` layout). Only the dominant frame's image
+    (`mainImgRef`) gets the scroll-scrubbed Ken-Burns drift now — it's
+    contained inside a rounded card rather than bleeding to the viewport
+    edges, so the effect is deliberately more restrained than before.
+  - `WhyKverra.jsx` — a blurred background photo and a large blurred blue
     accent-glow circle move at two different speeds behind the value-prop
     cards.
-  - `ServiceDetail.jsx` — four independent layers (blurred backdrop photo,
-    the sharp hero sample image, and two colour-glow blobs) all drift at
-    different rates for the same reason.
+  - `ServiceDetail.jsx` — since the hero was relighted (see below), down to
+    two restrained layers: the sharp hero sample image and one understated
+    ambient blue blob (`rgba(37,99,235,0.16)`), each drifting at a slightly
+    different rate. The blurred full-bleed backdrop photo and second colour
+    blob from the old dark hero were removed rather than just recoloured —
+    a busy multi-layer glow doesn't fit "clean, bright, premium."
   - `CTASection.jsx` — the full-bleed background photo scales down from
     `1.1` to `1` as the section scrolls through view (a slow "settle" zoom).
 
@@ -255,7 +261,7 @@ wrapped around `gsap.context()` for automatic cleanup on unmount.
   drag-to-scroll (via Pointer Events, with `setPointerCapture` for reliable
   touch dragging), and hides itself entirely when the row doesn't actually
   overflow. The real draggable hit area is a full 24px tall (touch-target
-  sized) even though the visible bar itself is a thin 3px gold pill — the
+  sized) even though the visible bar itself is a thin 3px blue pill — the
   hit area is invisible padding around the visible bar, not the bar itself.
 
 - **`BeforeAfterSlider.jsx`** — a drag-to-reveal comparison slider. **Not a
@@ -274,12 +280,29 @@ wrapped around `gsap.context()` for automatic cleanup on unmount.
   `onUpdate` writing `Math.round(proxy.val).toLocaleString()` into the DOM
   directly (not React state, for performance).
 
-- **`LoadingScreen.jsx`** — a fixed, full-screen overlay (logo, a drawing
-  gold rule, "INFOTECH" wordmark) shown once per **hard** page load (tracked
-  by a `loading` boolean in `App.jsx`'s state, set on mount and cleared when
-  the intro GSAP timeline's `onComplete` fires). Because routing is
-  client-side, this does **not** replay when navigating between pages within
-  the SPA — only on an actual browser refresh.
+- **`LoadingScreen.jsx`** — a fixed, full-screen overlay shown once per
+  **hard** page load (tracked by a `loading` boolean in `App.jsx`'s state,
+  set on mount and cleared when the intro GSAP timeline's `onComplete`
+  fires). Because routing is client-side, this does **not** replay when
+  navigating between pages within the SPA — only on an actual browser
+  refresh. Current concept is **"the image reveals"**: a clean white
+  (`bg-paper-50`) opening canvas, not a dark UI widget. One timeline plays,
+  in order: a thin blue line draws in → the Kverra wordmark/"Infotech"/tagline
+  settle → the identity moves up and out of the way as a bordered
+  photographic frame forms → a second copy of the same hero photo
+  (`photos.pool[1]`, the exact image `Hero.jsx`'s dominant collage frame
+  uses) wipes in over a raw/desaturated copy via an animated `clip-path:
+  inset()`, with the blue line reused as the wipe boundary → crop-mark
+  corners fade → GSAP's `Flip`
+  plugin grows the frame to fill the viewport (`Flip.getState` is captured,
+  a `.loader-frame--full` class — defined in `index.css`, `position: fixed;
+  inset: 0` — is applied instantly, then `Flip.from` animates the inverse
+  transform) → `onReveal()` fires so the homepage hero is already mid-reveal
+  underneath before this overlay finishes fading out. Using Flip for the
+  frame-to-fullscreen step (rather than hand-tweening `top`/`left`/`width`/
+  `height`) is a deliberate fix for an earlier bug where the image drifted
+  toward one side on wide desktop viewports, leaving empty canvas beside it.
+  `prefers-reduced-motion` skips straight to the final fullscreen state.
 
 - **`Navbar.jsx`** — slides/fades in on mount; toggles between two
   background states (`glass-nav` vs `glass-nav-top`, both CSS utility
@@ -297,22 +320,39 @@ Composes, in order: `Hero` → `StatsBar` → `WhatWeDo` → `WhyKverra` →
 `PortfolioGallery` (limited to 6 + "view all") → `Testimonials` → `FAQ` →
 `CTASection`.
 
-- **`Hero`** — eyebrow badge, `WordReveal` headline ("Real estate photos
-  that *sell* the listing"), subtext, two CTAs (WhatsApp + "See it in
-  action" anchor scroll), and the two-layer parallax image stack described
-  above, with a floating "4.9/5 rated" glass badge overlapping the images.
+- **`Hero`** — since the 2026 blue-and-white redesign, a two-column
+  editorial layout on a plain white background (not a full-bleed photo):
+  left column is eyebrow + `WordReveal` headline ("Real Estate Photos That
+  Look *Exceptional*.") + subtext + two CTAs (WhatsApp primary button, "See
+  it in action" → `/portfolio` secondary link) + a small "under 60 seconds"
+  line; right column is the 3-image collage described above. Below the
+  `sm:` breakpoint the collage collapses to a single image so mobile stays
+  one clean column instead of a cramped multi-image grid. There is no
+  review/rating badge anywhere in the hero — none exists in the data, and
+  none should be invented.
 - **`StatsBar`** — the four count-up stats, in a 2-col (mobile) / 4-col
   (desktop, divided by hairlines) grid.
 - **`WhatWeDo`** — a category-pill switcher (HDR / Twilight / Object Removal
   / Sky & Pool / Day-to-Dusk) that swaps which photo feeds the
-  `BeforeAfterSlider`.
+  `BeforeAfterSlider`. Heading is "One photo, two outcomes." — deliberately
+  *not* "This is what we do" (that heading belongs to `ServicesGrid` below;
+  keep them distinct so the homepage never shows the same heading twice).
 - **`WhyKverra`** — four value-prop cards (dedicated editor, turnaround,
   volume, revisions) over the two-layer parallax background described above.
-- **`ServicesGrid`** — a bento-style grid of all 8 services (hand-tuned
-  column spans so they tile a 4-column grid across 3 rows with no gaps),
-  each card a `TiltCard` linking to its `ServiceDetail` page.
+- **`ServicesGrid`** — since the 2026 redesign, an image-led card showcase
+  ("This is what we do.", `sm:grid-cols-2 lg:grid-cols-3`) of the curated
+  homepage service subset, each card a `TiltCard` linking to its
+  `ServiceDetail` page: a `BlurImage` service photo (blur-to-sharp reveal,
+  staggered per card via its `delay` prop) with a small circular icon badge
+  overlapping its corner, then name, tagline, a price/delivery metadata
+  row, and a "View service" link pinned to the card's bottom edge via
+  `mt-auto` so CTAs line up across a row regardless of tagline length. The
+  first curated service renders as a `featured` card (`lg:col-span-2`, a
+  wider `aspect-[16/9]` image) so the grid reads as a curated showcase
+  rather than nine uniformly repeated tiles — a size break only, no
+  "Featured"-style label or claim invented on top of the data.
 - **`FeaturedTransformations`** — "the showreel": a dark, cinematic section
-  (deep navy, gold accents, a `FilmSlate` icon eyebrow reading "THE
+  (deep navy, blue accents, a `FilmSlate` icon eyebrow reading "THE
   SHOWREEL") wrapping `CameraDollyGallery` with 6 curated transformation
   examples. This section and its gallery were redesigned in this project to
   read as a literal film-negative/showreel motif (desaturated-to-colour
@@ -341,10 +381,22 @@ clickable rows (thumbnail, name, tagline, price, delivery time), each
 linking to `ServiceDetail`.
 
 ### `ServiceDetail` (`/services/:slug`)
-One template that reads everything from `getServiceBySlug(slug)`. Dark hero
-with the 4-layer parallax described above, price/delivery badges, WhatsApp
-CTA; then a light section with a `BeforeAfterSlider` + a 2-image gallery +
-an "included" checklist card + one FAQ card; then 3 related services; then
+One template that reads everything from `getServiceBySlug(slug)`. Since a
+2026 redesign it's light end-to-end (`bg-paper-50`, no dark hero): a bright
+two-column hero (title/description/price/WhatsApp CTA left, one premium
+`BlurImage` in a rounded shadowed card right) with the restrained 2-layer
+parallax described above; then a **"One photo. Two outcomes."** comparison
+section — a row of quick-switcher pills (`comparisonShowcaseSlugs` in
+`services.js`, a 5-service curated subset distinct from
+`homepageServiceSlugs`; the current service renders as a non-clickable
+active `<span>`, the rest as `Link`s that navigate to that service's own
+detail page) above one elevated white card containing the `BeforeAfterSlider`
+plus a floating info card (micro-label, name, tagline, a static
+print-ready/colour-matched line, and a "Drag to compare" hint) — the info
+card is `lg:absolute` over the slider's corner and collapses to a normal
+stacked card below `lg:`, per the "don't force desktop layout onto mobile"
+rule; then the 2-image gallery, a light blue-tinted "included" checklist
+card (no longer dark navy) and one FAQ card; then 3 related services; then
 `CTASection`. Renders `<NotFound />` if the slug doesn't match any service.
 
 ### `Portfolio` (`/portfolio`)
@@ -363,12 +415,18 @@ Simple centered 404 card with a "Back to home" CTA.
 Every design token lives in **`src/index.css`**, inside a Tailwind v4
 `@theme` block — there is no `tailwind.config.js`.
 
-- **Colour**: a "royal" palette — deep navy/royal-blue scale
-  (`--color-brand-950` through `--color-brand-500`), a gold accent scale
-  (`--color-gold-300` through `--color-gold-600`), a near-black ink
-  (`--color-ink-900`), and two paper whites (`--color-paper-50`,
-  `--color-paper-100`). Sections alternate between dark (`bg-brand-950`) and
-  light (`bg-paper-50`/`bg-paper-100`/`bg-white`) for rhythm.
+- **Colour**: a "premium blue + white" palette (2026 client-approved
+  redesign, replacing an earlier navy + gold system) — a deep-navy scale
+  (`--color-brand-950` through `--color-brand-500`) kept for high-contrast
+  text and dark UI chrome (utility bar, footer, mobile menu), a single blue
+  accent scale (`--color-blue-300` through `--color-blue-600`) used
+  everywhere a color used to be gold (CTAs, links, icon rings, active
+  states, dividers), a near-black ink (`--color-ink-900`), and white/near
+  -white surfaces (`--color-paper-50`/`--color-paper-white` are pure white,
+  `--color-paper-100` a subtle blue-tinted neutral for alternating
+  sections). Sections alternate between dark (`bg-brand-950`) and light
+  (`bg-paper-50`/`bg-paper-100`/`bg-white`) for rhythm. There is no gold
+  token left anywhere in the codebase — don't reintroduce one.
 - **Type**: `--font-display` = Playfair Display (serif, used for every
   heading and any emphasized/italic word), `--font-body` = Plus Jakarta Sans
   (sans, body copy).
@@ -377,13 +435,13 @@ Every design token lives in **`src/index.css`**, inside a Tailwind v4
   - `.glass-panel` / `.glass-panel-light` — true glassmorphism (blur +
     saturation + gradient fill + inner specular highlight line), dark and
     light variants.
-  - `.glass-nav` / `.glass-nav-top` — the navbar's two frost states
-    (scrolled vs. at-top).
-  - `.glass-overlay` — the mobile menu's full-screen frosted backdrop.
+  - `.glass-overlay` — the mobile menu's full-screen frosted backdrop. (The
+    navbar itself is plain solid white, not a glass surface — `.glass-nav`
+    / `.glass-nav-top` were retired.)
   - `.liquid-mesh` — an animated, slowly-drifting multi-blob gradient
     background (used behind hero/banner sections instead of a flat fill).
-  - `.btn-liquid` — a glossy diagonal sheen overlay for solid gold buttons.
-  - `.gold-rule` — a thin horizontal gradient divider line.
+  - `.btn-liquid` — a glossy diagonal sheen overlay for solid blue buttons.
+  - `.accent-rule` — a thin horizontal gradient divider line.
   - `.no-scrollbar` — hides the native scrollbar on an `overflow-x: auto`
     element (used together with `HorizontalScrollbar` so there's no double
     scrollbar).
@@ -415,6 +473,13 @@ Every design token lives in **`src/index.css`**, inside a Tailwind v4
 - **The loading screen only replays on a full browser refresh**, not on
   in-app navigation — this is intentional, driven by `App.jsx`'s `loading`
   state living above the router.
+- **`.loader-frame--full` in `index.css` is deliberately written as a plain,
+  unlayered class** (not inside a Tailwind `@layer`), so it reliably beats
+  the loading frame's own Tailwind utility classes (`w-[...]`, `border`,
+  etc.) without needing `!important` — Tailwind v4 wraps its utilities in a
+  CSS layer that unlayered rules always outrank regardless of source order.
+  Don't "clean this up" into a Tailwind utility or arbitrary-value class; it
+  will silently stop overriding and the fullscreen Flip step will break.
 - **Testing caveat (only relevant to automated/headless browser testing,
   not real users):** GSAP/Lenis-driven animations can appear stuck
   mid-transition in an unfocused automated browser tab, because

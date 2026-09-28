@@ -45,7 +45,7 @@ export function Services() {
       <section className="relative overflow-hidden bg-gradient-to-b from-brand-950 via-brand-900 to-paper-50 pt-16 pb-16 sm:pt-24">
         <div aria-hidden="true" className="liquid-mesh pointer-events-none absolute inset-x-0 top-0 -z-10 h-[75%] opacity-70" />
         <div ref={headerRef} className="relative mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
-          <p className="glass-panel inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold tracking-wide text-gold-300">
+          <p className="glass-panel inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold tracking-wide text-blue-300">
             Every service, one editing team
           </p>
           <WordReveal
@@ -83,7 +83,7 @@ export function Services() {
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gold-500/10 text-gold-600">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500/10 text-blue-600">
                       {Icon && <Icon size={16} weight="bold" />}
                     </span>
                     <p className="font-display text-xl font-semibold text-ink-900">
@@ -104,7 +104,7 @@ export function Services() {
                 <ArrowRight
                   size={20}
                   weight="bold"
-                  className="hidden text-gold-600 transition-transform group-hover:translate-x-1 sm:block"
+                  className="hidden text-blue-600 transition-transform group-hover:translate-x-1 sm:block"
                 />
               </Link>
             );

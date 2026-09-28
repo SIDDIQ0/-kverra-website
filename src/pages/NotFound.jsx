@@ -10,7 +10,7 @@ export function NotFound() {
   return (
     <section className="flex min-h-[80vh] items-center justify-center bg-paper-50 px-4 py-32 text-center">
       <div>
-        <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gold-500/10 text-gold-600 ring-1 ring-gold-500/30">
+        <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-blue-500/10 text-blue-600 ring-1 ring-blue-500/30">
           <Compass size={28} weight="bold" />
         </span>
         <p className="mt-6 font-display text-6xl font-semibold text-brand-900">404</p>

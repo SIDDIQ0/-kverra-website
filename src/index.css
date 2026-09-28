@@ -12,12 +12,17 @@
   --font-display: "Playfair Display", "Plus Jakarta Sans", serif;
   --font-body: "Plus Jakarta Sans", sans-serif;
 
-  /* Warm ivory / charcoal-navy / gold palette - client-approved system.
-     brand-* keeps the deep charcoal-navy scale (typography, dark accents,
-     controlled-contrast bands) rather than the previous royal-blue fills;
-     paper-* is now the dominant warm-ivory canvas, with paper-white kept
-     separate for the navbar, which must stay pure white regardless of the
-     ivory background around it. */
+  /* Blue + white palette - client-approved system (2026 redesign brief).
+     brand-* keeps the deep navy scale for high-contrast text and dark UI
+     chrome (utility bar, footer, mobile menu) - it was already blue-leaning
+     under the old gold system, so it carries over unchanged. blue-* is the
+     new primary brand/action/accent scale, replacing the previous gold
+     accent everywhere (CTAs, links, icon rings, dividers, active states).
+     paper-* is the dominant white/near-white surface scale: paper-50 is
+     page background (pure white), paper-100 a subtle blue-tinted neutral
+     for alternating sections and hover fills, paper-white kept separate for
+     the navbar, which must stay pure white regardless of any future
+     surface tinting elsewhere. */
   --color-brand-950: #0e1524;
   --color-brand-900: #172033;
   --color-brand-800: #202b44;
@@ -25,19 +30,19 @@
   --color-brand-600: #3a4a6b;
   --color-brand-500: #4d5f82;
 
-  --color-gold-300: #f0e0bb;
-  --color-gold-400: #e2c477;
-  --color-gold-500: #c9a45c;
-  --color-gold-600: #a8823f;
+  --color-blue-300: #93c5fd;
+  --color-blue-400: #3b82f6;
+  --color-blue-500: #2563eb;
+  --color-blue-600: #1d4ed8;
 
   --color-ink-900: #172033;
   --color-secondary-500: #667085;
-  --color-paper-50: #f7f4ec;
-  --color-paper-100: #f0ead9;
+  --color-paper-50: #ffffff;
+  --color-paper-100: #f1f5fb;
   --color-paper-white: #ffffff;
 
   --color-glass-card: rgba(255, 255, 255, 0.65);
-  --color-glass-border: rgba(201, 164, 92, 0.25);
+  --color-glass-border: rgba(37, 99, 235, 0.22);
 }
 
 :root {
@@ -73,8 +78,8 @@ em, .font-display i, .font-display em {
 }
 
 ::selection {
-  background: var(--color-gold-400);
-  color: var(--color-brand-950);
+  background: var(--color-blue-400);
+  color: #ffffff;
 }
 
 /* Fixed, pointer-events-none grain overlay for a physical, non-flat surface.
@@ -92,11 +97,11 @@ em, .font-display i, .font-display em {
 /* True glassmorphism: blur + saturation, a soft gradient fill, and inner
    highlight/shadow lines to fake edge refraction rather than a flat blur.
    `.glass-panel` is the dark-context variant (photographic/hero backgrounds,
-   the charcoal-navy CTA band) - brighter and gold-rimmed per the new system,
-   but still tinted enough that light/gold text sitting on it stays legible.
-   `.glass-panel-light` is the ivory-context variant and carries the client's
-   literal rgba(255,255,255,0.65) card spec for surfaces on the warm-ivory
-   background or over a photo, paired with the new gold-alpha border. */
+   the charcoal-navy CTA band) - blue-rimmed per the new system, but still
+   tinted enough that light/white text sitting on it stays legible.
+   `.glass-panel-light` is the light-context variant and carries the
+   client's literal rgba(255,255,255,0.65) card spec for surfaces on the
+   white background or over a photo, paired with the new blue-alpha border. */
 .glass-panel {
   position: relative;
   isolation: isolate;
@@ -133,27 +138,27 @@ em, .font-display i, .font-display em {
   pointer-events: none;
 }
 
-/* Frosted mobile-menu overlay: the navbar itself is now solid white (see
+/* Frosted mobile-menu overlay: the navbar itself is solid white (see
    Navbar.jsx) so glass-nav/glass-nav-top were retired, but the full-screen
    mobile menu stays a dark frosted panel for contrast against its white
-   text and gold accents. */
+   text and blue accents. */
 .glass-overlay {
   background: linear-gradient(180deg, rgba(14, 21, 36, 0.92), rgba(23, 32, 51, 0.86));
   backdrop-filter: blur(30px) saturate(180%);
   -webkit-backdrop-filter: blur(30px) saturate(180%);
-  border-bottom: 1px solid rgba(226, 196, 119, 0.16);
+  border-bottom: 1px solid rgba(59, 130, 246, 0.18);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 /* Slim trust/contact strip above the main navbar: charcoal-navy ground,
-   restrained gold accents, deliberately quieter than the white nav below
+   restrained blue accents, deliberately quieter than the white nav below
    it so hierarchy stays on the navigation, not the utility row. */
 .utility-bar {
   background: var(--color-brand-900);
-  border-bottom: 1px solid rgba(226, 196, 119, 0.14);
+  border-bottom: 1px solid rgba(59, 130, 246, 0.16);
 }
 
-/* A glossy diagonal highlight for solid-colour (gold) buttons, so they
+/* A glossy diagonal highlight for solid-colour (blue) buttons, so they
    pick up the same liquid-light language without losing contrast. The
    sheen now sweeps slightly on hover (desktop/pointer only) instead of
    sitting static, for the "controlled sheen/light movement" hover cue. */
@@ -193,9 +198,9 @@ em, .font-display i, .font-display em {
    rhythm, transitions, pressed/focus states. Pair it with exactly one
    intensity modifier:
 
-     .btn-glass--primary          solid gold glass, the site's one primary
-                                   action colour. Pair with `.btn-liquid` for
-                                   the sheen highlight, as before.
+     .btn-glass--primary          solid blue glass, the site's one primary
+                                   action colour, white text. Pair with
+                                   `.btn-liquid` for the sheen highlight.
      .btn-glass--secondary        translucent white-glass, for secondary
                                    actions sitting on dark/navy grounds.
      .btn-glass--secondary-light  translucent ink-tinted glass, for the same
@@ -234,7 +239,7 @@ em, .font-display i, .font-display em {
   }
 }
 .btn-glass:focus-visible {
-  outline: 2px solid var(--color-gold-400);
+  outline: 2px solid var(--color-blue-400);
   outline-offset: 3px;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -248,23 +253,23 @@ em, .font-display i, .font-display em {
 }
 
 .btn-glass--primary {
-  background: linear-gradient(135deg, rgba(226, 196, 119, 0.98), rgba(201, 164, 92, 0.96));
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.98), rgba(37, 99, 235, 0.96));
   backdrop-filter: blur(14px) saturate(170%);
   -webkit-backdrop-filter: blur(14px) saturate(170%);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  color: var(--color-brand-900);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #ffffff;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.6),
-    inset 0 -1px 0 rgba(23, 32, 51, 0.15),
-    0 10px 28px -10px rgba(201, 164, 92, 0.55);
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -1px 0 rgba(14, 21, 36, 0.15),
+    0 10px 28px -10px rgba(37, 99, 235, 0.55);
 }
 @media (hover: hover) and (pointer: fine) {
   .btn-glass--primary:hover {
-    border-color: rgba(255, 255, 255, 0.65);
+    border-color: rgba(255, 255, 255, 0.5);
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.7),
-      inset 0 -1px 0 rgba(23, 32, 51, 0.15),
-      0 14px 34px -10px rgba(201, 164, 92, 0.65);
+      inset 0 1px 0 rgba(255, 255, 255, 0.45),
+      inset 0 -1px 0 rgba(14, 21, 36, 0.15),
+      0 14px 34px -10px rgba(37, 99, 235, 0.65);
   }
 }
 
@@ -281,7 +286,7 @@ em, .font-display i, .font-display em {
 @media (hover: hover) and (pointer: fine) {
   .btn-glass--secondary:hover {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.32), rgba(255, 255, 255, 0.14));
-    border-color: rgba(226, 196, 119, 0.4);
+    border-color: rgba(59, 130, 246, 0.4);
   }
 }
 
@@ -298,7 +303,7 @@ em, .font-display i, .font-display em {
 @media (hover: hover) and (pointer: fine) {
   .btn-glass--secondary-light:hover {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.72));
-    border-color: rgba(201, 164, 92, 0.4);
+    border-color: rgba(37, 99, 235, 0.4);
   }
 }
 
@@ -314,7 +319,7 @@ em, .font-display i, .font-display em {
 
 @media (prefers-reduced-transparency: reduce) {
   .btn-glass--primary {
-    background: var(--color-gold-500);
+    background: var(--color-blue-500);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
@@ -345,15 +350,15 @@ em, .font-display i, .font-display em {
   }
 }
 
-/* Signature background: soft gold colour blobs over the charcoal-navy,
+/* Signature background: soft blue colour blobs over the charcoal-navy,
    drifting slowly. Used behind glass surfaces on interior-page hero bands
    instead of a flat navy fill. */
 .liquid-mesh {
   background:
-    radial-gradient(at 12% 18%, rgba(201, 164, 92, 0.4) 0%, transparent 45%),
-    radial-gradient(at 88% 12%, rgba(226, 196, 119, 0.3) 0%, transparent 50%),
-    radial-gradient(at 75% 85%, rgba(201, 164, 92, 0.28) 0%, transparent 45%),
-    radial-gradient(at 20% 90%, rgba(226, 196, 119, 0.22) 0%, transparent 50%),
+    radial-gradient(at 12% 18%, rgba(37, 99, 235, 0.4) 0%, transparent 45%),
+    radial-gradient(at 88% 12%, rgba(59, 130, 246, 0.3) 0%, transparent 50%),
+    radial-gradient(at 75% 85%, rgba(37, 99, 235, 0.28) 0%, transparent 45%),
+    radial-gradient(at 20% 90%, rgba(59, 130, 246, 0.22) 0%, transparent 50%),
     linear-gradient(180deg, #0e1524 0%, #202b44 55%, #0e1524 100%);
   background-size: 180% 180%, 180% 180%, 180% 180%, 180% 180%, 100% 100%;
   animation: liquid-drift 26s ease-in-out infinite;
@@ -385,34 +390,26 @@ em, .font-display i, .font-display em {
   display: none;
 }
 
-.gold-rule {
+.accent-rule {
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--color-gold-500), transparent);
+  background: linear-gradient(90deg, transparent, var(--color-blue-500), transparent);
 }
 
-/* Slow ambient breathing glow behind the cinematic loader's void/focus
-   phases, so the dark opening reads as alive rather than a flat empty page. */
-.loader-ambient {
-  background: radial-gradient(circle, rgba(201, 164, 92, 0.28) 0%, transparent 68%);
-  animation: loader-breathe 4.5s ease-in-out infinite;
-}
-
-@keyframes loader-breathe {
-  0%, 100% {
-    transform: translate(-50%, -50%) scale(0.92);
-    opacity: 0.5;
-  }
-  50% {
-    transform: translate(-50%, -50%) scale(1.08);
-    opacity: 0.85;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .loader-ambient {
-    animation: none;
-    opacity: 0.55;
-  }
+/* The loader's photographic frame's fullscreen state, toggled imperatively
+   right before GSAP Flip animates into it (see LoadingScreen.jsx). Plain/
+   unlayered like the rest of this file's custom classes, so it reliably
+   outranks the frame's own Tailwind utility classes (w-[…], border, etc.)
+   without needing !important - Tailwind v4 wraps its utilities in a layer
+   that unlayered CSS always outranks regardless of source order. */
+.loader-frame--full {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  max-width: none;
+  max-height: none;
+  border: none;
+  margin: 0;
 }
 
 @keyframes whatsapp-ring {
