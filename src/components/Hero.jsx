@@ -74,9 +74,13 @@ export function Hero({ reveal = true }) {
 
   return (
     <section id="home" ref={rootRef} className="relative isolate overflow-hidden bg-paper-50">
-      <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 py-20 sm:px-6 sm:py-24 lg:grid-cols-2 lg:gap-16 lg:px-8 lg:py-28">
-        {/* Left: eyebrow, headline, copy, CTAs */}
-        <div className="relative z-10">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-4 py-14 sm:gap-12 sm:px-6 sm:py-24 lg:grid-cols-2 lg:gap-16 lg:px-8 lg:py-28">
+        {/* Left: eyebrow, headline, copy, CTAs. Mobile gets its own tighter
+            rhythm (smaller top margins, bigger headline, full-width primary
+            CTA, secondary link demoted and stacked below it) rather than a
+            shrunk copy of the desktop spacing - see
+            Kverra_Mobile_Homepage_Service_Page_Fixes.md. */}
+        <div className="relative z-10 min-w-0">
           <p className="hero-anim hero-eyebrow text-xs font-semibold tracking-[0.3em] text-blue-600 uppercase">
             Real Estate Photo Editing
           </p>
@@ -88,34 +92,37 @@ export function Hero({ reveal = true }) {
             trigger="load"
             play={reveal}
             delay={0.3}
-            className="mt-5 font-display text-4xl leading-[1.08] font-semibold tracking-tight text-ink-900 sm:text-5xl lg:text-[3.4rem]"
+            className="mt-4 font-display text-[2.5rem] leading-[1.08] font-semibold tracking-tight text-ink-900 sm:mt-5 sm:text-5xl lg:text-[3.4rem]"
           />
-          <p className="hero-anim hero-sub mt-6 max-w-md text-sm leading-relaxed text-secondary-500 sm:text-base">
+          <p className="hero-anim hero-sub mt-5 max-w-md text-base leading-relaxed text-secondary-500 sm:mt-6">
             Professional photo editing for real estate agents, photographers
             and property marketing teams, with consistent colour, lighting
             and detail across every listing.
           </p>
-          <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
+          <div className="mt-7 flex flex-col items-start gap-3 sm:mt-8 sm:flex-row sm:items-center sm:gap-x-6 sm:gap-y-3">
             <a
               ref={ctaRef}
               href={whatsappLink()}
               target="_blank"
               rel="noopener noreferrer"
-              className="hero-anim hero-cta btn-glass btn-glass--primary btn-liquid w-full max-w-xs px-8 py-4 text-sm sm:w-auto sm:text-base"
+              className="hero-anim hero-cta btn-glass btn-glass--primary btn-liquid w-full px-8 py-4 text-sm sm:w-auto sm:text-base"
             >
               Chat on WhatsApp
               <ArrowRight size={19} weight="bold" />
             </a>
             <Link
               to="/portfolio"
-              className="hero-anim hero-cta group flex items-center gap-2 text-sm font-semibold text-ink-900 transition-colors hover:text-blue-600"
+              className="hero-anim hero-cta group flex items-center gap-2 text-sm font-medium text-secondary-500 transition-colors hover:text-blue-600"
             >
               <PlayCircle size={20} weight="fill" className="text-blue-500" />
               See it in action
               <ArrowRight size={16} weight="bold" className="transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
-          <p className="hero-anim hero-cta mt-5 flex items-center gap-1.5 text-xs text-secondary-500">
+          {/* Desktop-only supporting line - on mobile it's exactly the kind
+              of small print that reads as clutter under an already-full CTA
+              stack, so it's dropped there rather than shrunk further. */}
+          <p className="hero-anim hero-cta hidden items-center gap-1.5 text-xs text-secondary-500 sm:mt-5 sm:flex">
             <Timer size={13} weight="fill" className="text-blue-500" />
             Easily order in under 60 seconds
           </p>
@@ -126,7 +133,7 @@ export function Hero({ reveal = true }) {
             (a hero room, a detail room, an amenity). Below `sm:`, only the
             dominant image shows so mobile stays a clean single column
             instead of a cramped collage. */}
-        <div className="hero-image-col relative">
+        <div className="hero-image-col relative min-w-0">
           <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-2xl shadow-brand-900/15 sm:hidden">
             <img
               src={MAIN_IMAGE}

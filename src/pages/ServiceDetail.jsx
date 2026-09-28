@@ -119,8 +119,8 @@ export function ServiceDetail() {
             <span className="text-blue-600">{service.name}</span>
           </nav>
 
-          <div ref={headerRef} className="mt-8 grid gap-10 lg:grid-cols-2 lg:items-center">
-            <div>
+          <div ref={headerRef} className="mt-8 grid grid-cols-1 gap-10 lg:grid-cols-2 lg:items-center">
+            <div className="min-w-0">
               <span className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-500/10 text-blue-600 ring-1 ring-blue-500/20">
                 {Icon && <Icon size={22} weight="bold" />}
               </span>
@@ -156,7 +156,7 @@ export function ServiceDetail() {
               </a>
             </div>
 
-            <div className="h-[320px] overflow-hidden rounded-[1.75rem] shadow-xl shadow-brand-900/10 ring-1 ring-blue-500/10 sm:h-[380px]">
+            <div className="h-[320px] min-w-0 overflow-hidden rounded-[1.75rem] shadow-xl shadow-brand-900/10 ring-1 ring-blue-500/10 sm:h-[380px]">
               <BlurImage
                 ref={heroImgRef}
                 src={service.heroImage}
@@ -170,8 +170,8 @@ export function ServiceDetail() {
 
       <section className="bg-paper-50 py-20 sm:py-24">
         <div ref={bodyRef} className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-12 lg:grid-cols-[1.3fr_1fr]">
-            <div>
+          <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.3fr_1fr]">
+            <div className="min-w-0">
               <h2 className="font-display text-3xl font-semibold tracking-tight text-ink-900">
                 One photo. <em className="text-blue-600">Two outcomes.</em>
               </h2>
@@ -180,7 +180,15 @@ export function ServiceDetail() {
                 edit for {service.name.toLowerCase()}.
               </p>
 
-              <div className="mt-6 flex gap-2 overflow-x-auto pb-2 sm:flex-wrap">
+              {/* This row is the main historical overflow culprit: it's a
+                  horizontally-scrollable flex row nested inside a grid item.
+                  Flex/grid items default to `min-width: auto`, i.e. they
+                  refuse to shrink below their content's natural width -
+                  without `min-w-0` on every ancestor up to the grid item
+                  above, a handful of `shrink-0` pills can silently force the
+                  whole grid track (and therefore the page) wider than the
+                  viewport instead of scrolling inside this row. */}
+              <div className="mt-6 min-w-0 flex gap-2 overflow-x-auto pb-2 sm:flex-wrap">
                 {showcase.map((s) =>
                   s.slug === service.slug ? (
                     <span
@@ -231,7 +239,7 @@ export function ServiceDetail() {
                 </div>
               </div>
 
-              <div className="mt-10 grid gap-4 sm:grid-cols-2">
+              <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2">
                 {service.gallery.map((src, i) => (
                   <div key={i} className="overflow-hidden rounded-2xl">
                     <BlurImage
@@ -245,7 +253,7 @@ export function ServiceDetail() {
               </div>
             </div>
 
-            <div className="space-y-8">
+            <div className="min-w-0 space-y-8">
               <div className="rounded-2xl bg-paper-100 p-8 ring-1 ring-blue-500/10">
                 <p className="font-display text-lg font-semibold text-blue-600">
                   What is included
@@ -278,7 +286,7 @@ export function ServiceDetail() {
           <h2 className="font-display text-3xl font-semibold tracking-tight text-ink-900">
             Other services
           </h2>
-          <div ref={relatedRef} className="mt-8 grid gap-6 sm:grid-cols-3">
+          <div ref={relatedRef} className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-3">
             {related.map((s) => {
               const RelatedIcon = icons[s.icon];
               return (

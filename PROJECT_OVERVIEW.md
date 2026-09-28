@@ -480,6 +480,28 @@ Every design token lives in **`src/index.css`**, inside a Tailwind v4
   CSS layer that unlayered rules always outrank regardless of source order.
   Don't "clean this up" into a Tailwind utility or arbitrary-value class; it
   will silently stop overriding and the fullscreen Flip step will break.
+- **A `grid`/`flex` item that contains a horizontally-scrollable row
+  (`overflow-x-auto` + `shrink-0` children, like the service-detail
+  comparison pills) needs an explicit mobile-safe column track, or the row
+  stops scrolling internally and pushes the whole page wider instead.**
+  Grid/flex items default to `min-width: auto` — they refuse to shrink
+  below their content's natural width. Nest an unconstrained
+  `overflow-x-auto` row a couple of levels inside a `grid` that has no base
+  `grid-cols-*` (only an `lg:grid-cols-*` override, as several sections on
+  this site use for a mobile-stacks/desktop-columns layout) and that
+  implicit auto-sized mobile column can grow to fit the row's full
+  unscrolled width. This was a real bug on `ServiceDetail.jsx`'s mobile
+  layout (content clipped on the left, navbar/logo appearing shifted) fixed
+  by giving that grid — and every other multi-column grid on the page, as a
+  precaution — an explicit base `grid-cols-1` (Tailwind's
+  `repeat(1, minmax(0, 1fr))`, which actually caps the track, unlike the
+  implicit `auto` track you get by leaving `grid-cols-*` unset below the
+  breakpoint) plus `min-w-0` on the grid items in the ancestor chain down to
+  the scrollable row. `CameraDollyGallery`, `Testimonials`'s row and
+  `HorizontalScrollbar`'s target aren't nested inside a grid/flex ancestor
+  today, so they don't hit this, but the same fix applies if one ever is.
+  Reach for this pattern rather than `overflow-x: hidden` on `body`/`html`,
+  which only hides the symptom.
 - **Testing caveat (only relevant to automated/headless browser testing,
   not real users):** GSAP/Lenis-driven animations can appear stuck
   mid-transition in an unfocused automated browser tab, because
