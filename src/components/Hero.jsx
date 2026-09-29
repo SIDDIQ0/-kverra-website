@@ -74,7 +74,7 @@ export function Hero({ reveal = true }) {
 
   return (
     <section id="home" ref={rootRef} className="relative isolate overflow-hidden bg-paper-50">
-      <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-4 py-14 sm:gap-12 sm:px-6 sm:py-24 lg:grid-cols-2 lg:gap-16 lg:px-8 lg:py-28">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-4 py-14 sm:gap-12 sm:px-6 sm:py-24 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16 lg:px-8 lg:py-28">
         {/* Left: eyebrow, headline, copy, CTAs. Mobile gets its own tighter
             rhythm (smaller top margins, bigger headline, full-width primary
             CTA, secondary link demoted and stacked below it) rather than a
@@ -86,18 +86,17 @@ export function Hero({ reveal = true }) {
           </p>
           <WordReveal
             as="h1"
-            text="Real Estate Photos That Look Exceptional."
-            emphasize="Exceptional"
-            emphasisClassName="text-blue-600 italic"
+            text="Professional Real Estate Photo Editing"
             trigger="load"
             play={reveal}
             delay={0.3}
             className="mt-4 font-display text-[2.5rem] leading-[1.08] font-semibold tracking-tight text-ink-900 sm:mt-5 sm:text-5xl lg:text-[3.4rem]"
           />
           <p className="hero-anim hero-sub mt-5 max-w-md text-base leading-relaxed text-secondary-500 sm:mt-6">
-            Professional photo editing for real estate agents, photographers
-            and property marketing teams, with consistent colour, lighting
-            and detail across every listing.
+            Professional real estate photo editing services. Enhance your
+            real estate photos with our <strong className="font-semibold text-ink-900">high-quality</strong>,{" "}
+            <strong className="font-semibold text-ink-900">fast</strong>, and{" "}
+            <strong className="font-semibold text-ink-900">affordable</strong> editing.
           </p>
           <div className="mt-7 flex flex-col items-start gap-3 sm:mt-8 sm:flex-row sm:items-center sm:gap-x-6 sm:gap-y-3">
             <a
@@ -130,19 +129,13 @@ export function Hero({ reveal = true }) {
 
         {/* Right: premium multi-image composition - one dominant frame plus
             two supporting frames, echoing how a listing itself is shot
-            (a hero room, a detail room, an amenity). Below `sm:`, only the
-            dominant image shows so mobile stays a clean single column
-            instead of a cramped collage. */}
+            (a hero room, a detail room, an amenity). Kept as a real 3-image
+            collage at every breakpoint, including mobile - a single-image
+            mobile fallback was tried and rejected (see
+            Kverra_Homepage_Hero_Layout_and_Content_Changes.md), only the
+            overall height/gap scale down below `sm:`. */}
         <div className="hero-image-col relative min-w-0">
-          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-2xl shadow-brand-900/15 sm:hidden">
-            <img
-              src={MAIN_IMAGE}
-              alt="Professionally edited living room with balanced light and true-to-life colour"
-              className="h-full w-full object-cover object-[center_32%]"
-            />
-          </div>
-
-          <div className="hidden sm:grid sm:h-[440px] sm:grid-cols-[1.6fr_1fr] sm:grid-rows-[1.5fr_1fr] sm:gap-4 lg:h-[520px]">
+          <div className="grid h-[340px] grid-cols-[1.6fr_1fr] grid-rows-[1.5fr_1fr] gap-3 sm:h-[440px] sm:gap-4 lg:h-[520px]">
             <div className="relative col-start-1 row-start-1 overflow-hidden rounded-2xl shadow-2xl shadow-brand-900/15">
               <img
                 ref={mainImgRef}

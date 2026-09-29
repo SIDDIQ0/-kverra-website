@@ -220,12 +220,19 @@ wrapped around `gsap.context()` for automatic cleanup on unmount.
   `gsap.fromTo(..., { scrollTrigger: { scrub: true } })` (i.e. the animation
   is tied directly to scroll position, not time):
   - `Hero.jsx` — since the 2026 blue-and-white redesign, the hero is a
-    two-column layout (copy left, a 3-image collage right: one dominant
-    frame plus two smaller supporting frames in a `grid-cols-[1.6fr_1fr]
-    grid-rows-[1.5fr_1fr]` layout). Only the dominant frame's image
-    (`mainImgRef`) gets the scroll-scrubbed Ken-Burns drift now — it's
-    contained inside a rounded card rather than bleeding to the viewport
-    edges, so the effect is deliberately more restrained than before.
+    two-column layout (copy left at `lg:grid-cols-[0.9fr_1.1fr]` — the
+    image column is deliberately given more width than the text column —
+    a 3-image collage right: one dominant frame plus two smaller
+    supporting frames in a `grid-cols-[1.6fr_1fr] grid-rows-[1.5fr_1fr]`
+    layout). The collage is the same 3-image arrangement at **every**
+    breakpoint including mobile (only its overall height/gap shrink below
+    `sm:`) — an earlier single-image mobile fallback was tried and
+    explicitly rejected, see
+    `Kverra_Homepage_Hero_Layout_and_Content_Changes.md`. Only the
+    dominant frame's image (`mainImgRef`) gets the scroll-scrubbed
+    Ken-Burns drift — it's contained inside a rounded card rather than
+    bleeding to the viewport edges, so the effect is deliberately more
+    restrained than before.
   - `WhyKverra.jsx` — a blurred background photo and a large blurred blue
     accent-glow circle move at two different speeds behind the value-prop
     cards.
@@ -322,14 +329,19 @@ Composes, in order: `Hero` → `StatsBar` → `WhatWeDo` → `WhyKverra` →
 
 - **`Hero`** — since the 2026 blue-and-white redesign, a two-column
   editorial layout on a plain white background (not a full-bleed photo):
-  left column is eyebrow + `WordReveal` headline ("Real Estate Photos That
-  Look *Exceptional*.") + subtext + two CTAs (WhatsApp primary button, "See
-  it in action" → `/portfolio` secondary link) + a small "under 60 seconds"
-  line; right column is the 3-image collage described above. Below the
-  `sm:` breakpoint the collage collapses to a single image so mobile stays
-  one clean column instead of a cramped multi-image grid. There is no
-  review/rating badge anywhere in the hero — none exists in the data, and
-  none should be invented.
+  left column is eyebrow ("Real Estate Photo Editing") + `WordReveal`
+  headline **"Professional Real Estate Photo Editing"** (deliberately
+  literal, not a fancy/vague marketing line — a prior "Real Estate Photos
+  That Look Exceptional." headline was explicitly rejected as too vague;
+  see `Kverra_Homepage_Hero_Layout_and_Content_Changes.md`. Don't
+  reintroduce abstract/poetic hero copy) + a supporting paragraph with
+  `<strong>` around "high-quality" / "fast" / "affordable" + two CTAs
+  (WhatsApp primary button, "See it in action" → `/portfolio` secondary
+  link) + a small "under 60 seconds" line (desktop-only, hidden on
+  mobile); right column is the 3-image collage described above, shown at
+  every breakpoint (not just desktop — see the parallax bullet above).
+  There is no review/rating badge anywhere in the hero — none exists in
+  the data, and none should be invented.
 - **`StatsBar`** — the four count-up stats, in a 2-col (mobile) / 4-col
   (desktop, divided by hairlines) grid.
 - **`WhatWeDo`** — a category-pill switcher (HDR / Twilight / Object Removal
