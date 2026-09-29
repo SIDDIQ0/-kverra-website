@@ -10,6 +10,7 @@ import {
   ArrowsClockwise,
   Armchair,
   ArrowRight,
+  Clock,
 } from "@phosphor-icons/react";
 import { homepageServiceSlugs, getServiceBySlug } from "../data/services";
 import { useReveal, useStaggerReveal } from "../hooks/useReveal";
@@ -61,9 +62,8 @@ function ServiceCard({ s, index, featured = false }) {
         </p>
         <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-secondary-500">{s.tagline}</p>
 
-        <div className="mt-4 flex items-center gap-2 text-xs font-medium text-secondary-500">
-          <span>From ${s.price} / image</span>
-          <span className="h-1 w-1 rounded-full bg-secondary-500/40" />
+        <div className="mt-4 flex items-center gap-1.5 text-xs font-medium text-secondary-500">
+          <Clock size={13} weight="bold" />
           <span>{s.delivery}</span>
         </div>
 

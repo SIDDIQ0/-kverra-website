@@ -95,11 +95,7 @@ export function Services() {
                   </p>
                 </div>
                 <div className="text-left sm:text-right">
-                  <p className="font-display text-lg font-semibold text-brand-900">
-                    ${s.price}
-                    <span className="text-sm font-normal text-ink-900/50"> / image</span>
-                  </p>
-                  <p className="text-xs text-ink-900/50">{s.delivery}</p>
+                  <p className="text-sm font-semibold text-ink-900/70">{s.delivery}</p>
                 </div>
                 <ArrowRight
                   size={20}

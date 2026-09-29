@@ -20,8 +20,9 @@ dual delivery.
 It is a **marketing site only** — there is no backend, no database, no user
 accounts, no payment flow. The only "conversion" action anywhere on the site
 is a **WhatsApp deep link** (`https://wa.me/...`) that opens a pre-filled
-chat. All content (services, prices, testimonials, images) is static data
-shipped inside the JavaScript bundle.
+chat. All content (services, testimonials, images) is static data shipped
+inside the JavaScript bundle. There is no pricing shown anywhere on the
+site (removed sitewide in 2026) — `services.js` has no `price` field.
 
 ---
 
@@ -85,7 +86,7 @@ Defined in `src/App.jsx` with `react-router-dom` v7:
 | Path | Component | Purpose |
 |---|---|---|
 | `/` | `Home` | Composes every homepage section in order (see section 7) |
-| `/services` | `Services` | Full list of all 8 services as rows |
+| `/services` | `Services` | Full list of all 10 services as rows |
 | `/services/:slug` | `ServiceDetail` | One dynamic template for every service, driven entirely by `services.js` |
 | `/portfolio` | `Portfolio` | Full masonry gallery |
 | `/privacy-policy` | `PrivacyPolicy` | Static legal text |
@@ -109,15 +110,24 @@ or falling back to `window.scrollTo` under reduced motion.
 Everything content-related is a plain JS module exporting arrays/objects —
 **no CMS, no fetch calls**.
 
-- **`services.js`** — the single source of truth for all 8 services. Each
-  entry has: `slug`, `name`, `tagline`, `icon` (a string name looked up
-  against a Phosphor icon map — see the gotcha in section 9), `image` /
-  `heroImage` / `gallery` (references into `images.js`), `price` (USD per
-  image), `delivery` (a real turnaround string like "Under 24 hours"),
-  `description`, `whatsIncluded` (array of bullet strings), and `faq` (one
-  Q&A pair). This one file drives the Services index page, the
+- **`services.js`** — the single source of truth for all 10 services. Each
+  entry has: `slug`, `name`, `tagline` (short, for cards/nav), `icon` (a
+  string name looked up against a Phosphor icon map — see the gotcha in
+  section 9), `image` / `heroImage` / `gallery` (references into
+  `images.js`), `delivery` (a real turnaround string like "Under 24
+  hours"), `description` (longer detail-page hero paragraph), `whatWeDo`
+  (a paragraph), `whatsIncluded` (array of bullet strings), `bestFor`
+  (array of short use-case strings), an optional `principle` (`{ label,
+  text }` — a named caveat like "Why it matters" or "Important editing
+  principle"; not every service has one), and `faq` (one Q&A pair).
+  **There is no `price` field** — pricing was removed from the entire
+  visible site (2026 change); don't reintroduce a price anywhere without
+  being asked. This one file drives the Services index page, the
   `ServiceDetail` dynamic template, the Navbar's services dropdown, the
-  homepage `ServicesGrid`, and the Footer's service links.
+  homepage `ServicesGrid`, and the Footer's service links. It also exports
+  `comparisonShowcaseSlugs`, a 5-service curated subset used only by
+  `ServiceDetail`'s quick-switcher pills (distinct from
+  `homepageServiceSlugs`, the 9-service homepage subset).
 - **`images.js`** — exports a `photos` object keyed by scene
   (`livingRoom`, `kitchen`, `twilight`, `aerial`, `pool`, `bedroom`,
   `exteriorDay`, `bathroom`), each an array of curated, verified Unsplash
@@ -356,8 +366,9 @@ Composes, in order: `Hero` → `StatsBar` → `WhatWeDo` → `WhyKverra` →
   homepage service subset, each card a `TiltCard` linking to its
   `ServiceDetail` page: a `BlurImage` service photo (blur-to-sharp reveal,
   staggered per card via its `delay` prop) with a small circular icon badge
-  overlapping its corner, then name, tagline, a price/delivery metadata
-  row, and a "View service" link pinned to the card's bottom edge via
+  overlapping its corner, then name, tagline, a delivery-time row (no
+  price — pricing was removed sitewide), and a "View service" link pinned
+  to the card's bottom edge via
   `mt-auto` so CTAs line up across a row regardless of tagline length. The
   first curated service renders as a `featured` card (`lg:col-span-2`, a
   wider `aspect-[16/9]` image) so the grid reads as a curated showcase
@@ -388,27 +399,32 @@ Composes, in order: `Hero` → `StatsBar` → `WhatWeDo` → `WhyKverra` →
   of `Services`, `ServiceDetail`, and `Portfolio` too.
 
 ### `Services` (`/services`)
-A hero (dark gradient, centered) followed by all 8 services as full-width
-clickable rows (thumbnail, name, tagline, price, delivery time), each
-linking to `ServiceDetail`.
+A hero (dark gradient, centered) followed by all 10 services as full-width
+clickable rows (thumbnail, name, tagline, delivery time — **no price**,
+removed sitewide in 2026), each linking to `ServiceDetail`.
 
 ### `ServiceDetail` (`/services/:slug`)
 One template that reads everything from `getServiceBySlug(slug)`. Since a
 2026 redesign it's light end-to-end (`bg-paper-50`, no dark hero): a bright
-two-column hero (title/description/price/WhatsApp CTA left, one premium
-`BlurImage` in a rounded shadowed card right) with the restrained 2-layer
-parallax described above; then a **"One photo. Two outcomes."** comparison
-section — a row of quick-switcher pills (`comparisonShowcaseSlugs` in
-`services.js`, a 5-service curated subset distinct from
-`homepageServiceSlugs`; the current service renders as a non-clickable
-active `<span>`, the rest as `Link`s that navigate to that service's own
-detail page) above one elevated white card containing the `BeforeAfterSlider`
-plus a floating info card (micro-label, name, tagline, a static
-print-ready/colour-matched line, and a "Drag to compare" hint) — the info
-card is `lg:absolute` over the slider's corner and collapses to a normal
-stacked card below `lg:`, per the "don't force desktop layout onto mobile"
-rule; then the 2-image gallery, a light blue-tinted "included" checklist
-card (no longer dark navy) and one FAQ card; then 3 related services; then
+two-column hero (title/description/delivery-badge/WhatsApp CTA left, one
+premium `BlurImage` in a rounded shadowed card right — **no price**) with
+the restrained 2-layer parallax described above; then a **"One photo. Two
+outcomes."** comparison section — a row of quick-switcher pills
+(`comparisonShowcaseSlugs` in `services.js`, a 5-service curated subset
+distinct from `homepageServiceSlugs`; the current service renders as a
+non-clickable active `<span>`, the rest as `Link`s that navigate to that
+service's own detail page) above one elevated white card containing the
+`BeforeAfterSlider` plus a floating info card (micro-label, name, tagline,
+a static print-ready/colour-matched line, and a "Drag to compare" hint) —
+the info card is `lg:absolute` over the slider's corner and collapses to a
+normal stacked card below `lg:`, per the "don't force desktop layout onto
+mobile" rule; then the 2-image gallery. The right-column sidebar stacks,
+in order: a "What we do" card (`service.whatWeDo`), a "Best for" card
+(`service.bestFor`, rendered as small pill tags), a light blue-tinted
+"What is included" checklist card (`service.whatsIncluded`, no longer dark
+navy), an optional `service.principle` callout (a labelled note like "Why
+it matters" — only rendered when the service data has one), and one FAQ
+card; then 3 related services (delivery time only, no price); then
 `CTASection`. Renders `<NotFound />` if the slug doesn't match any service.
 
 ### `Portfolio` (`/portfolio`)
@@ -514,6 +530,23 @@ Every design token lives in **`src/index.css`**, inside a Tailwind v4
   today, so they don't hit this, but the same fix applies if one ever is.
   Reach for this pattern rather than `overflow-x: hidden` on `body`/`html`,
   which only hides the symptom.
+- **`Navbar.jsx`'s mobile menu overlay needs `data-lenis-prevent` on the
+  scrollable root, or its own `overflow-y-auto` silently stops working.**
+  Opening the mobile menu calls `lenis?.stop()` to lock the *page* behind
+  it (so a touch-drag on the overlay can't smooth-scroll the page
+  underneath) — but `lenis.stop()` disables Lenis's scroll-input handling
+  globally, not just for the page behind the overlay, and Lenis's wheel/
+  touch listeners are attached at the document level regardless. Without
+  `data-lenis-prevent` on the overlay, Lenis was intercepting scroll
+  gestures *inside* the overlay too, so once the services list (10 items)
+  pushed the menu taller than the viewport, Portfolio and the WhatsApp CTA
+  below it became unreachable — not because of a layout/clipping bug, but
+  because the overlay's own native scroll was being silently blocked.
+  `data-lenis-prevent` is Lenis's documented escape hatch: it tells Lenis
+  to skip interception for that element's events entirely, independent of
+  `stop()`/`start()` state. Any future fixed-position overlay that needs
+  its own independent scroll while Lenis has the main page locked needs
+  the same attribute.
 - **Testing caveat (only relevant to automated/headless browser testing,
   not real users):** GSAP/Lenis-driven animations can appear stuck
   mid-transition in an unfocused automated browser tab, because

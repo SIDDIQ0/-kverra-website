@@ -97,7 +97,15 @@ export function Navbar() {
       document.body.style.overflow = "hidden";
       // Lenis owns wheel/touch scroll independently of body overflow, so a
       // touch drag on the overlay can still smooth-scroll the page behind
-      // it unless Lenis itself is paused too.
+      // it unless Lenis itself is paused too. But `lenis.stop()` disables
+      // scroll input *globally*, not just on the page behind the overlay -
+      // it was silently blocking the overlay's own `overflow-y-auto` too,
+      // which made Portfolio (and the CTA below it) unreachable once the
+      // services list pushed the menu taller than the viewport. The
+      // `data-lenis-prevent` attribute on the overlay below is Lenis's own
+      // documented escape hatch for exactly this: it tells Lenis to skip
+      // its scroll interception for that element regardless of stop/start
+      // state, so its native scroll works independently of the page lock.
       lenis?.stop();
       gsap.fromTo(
         mobileRef.current,
@@ -213,7 +221,7 @@ export function Navbar() {
                             {s.name}
                           </span>
                           <span className="mt-0.5 block text-xs text-secondary-500">
-                            From ${s.price} / image
+                            {s.delivery}
                           </span>
                         </span>
                       </Link>
@@ -263,7 +271,8 @@ export function Navbar() {
       {mobileOpen && (
         <div
           ref={mobileRef}
-          className="glass-overlay fixed inset-0 z-50 flex flex-col overflow-y-auto px-6 py-6 lg:hidden"
+          data-lenis-prevent
+          className="glass-overlay fixed inset-0 z-50 flex flex-col overflow-y-auto overscroll-contain px-6 py-6 lg:hidden"
         >
           <div className="flex items-center justify-between">
             <img src={logoMark} alt="Kverra Infotech" className="h-9 w-auto" />

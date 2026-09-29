@@ -134,12 +134,7 @@ export function ServiceDetail() {
                 {service.description}
               </p>
               <div className="mt-6 flex flex-wrap items-center gap-4">
-                <div className="rounded-xl bg-blue-500/5 px-4 py-2.5 ring-1 ring-blue-500/15">
-                  <p className="font-display text-lg font-semibold text-blue-600">
-                    ${service.price} <span className="text-xs font-normal text-secondary-500">/ image</span>
-                  </p>
-                </div>
-                <div className="flex items-center gap-1.5 text-sm text-secondary-500">
+                <div className="flex items-center gap-1.5 rounded-xl bg-blue-500/5 px-4 py-2.5 text-sm font-semibold text-blue-600 ring-1 ring-blue-500/15">
                   <Clock size={16} weight="bold" />
                   {service.delivery}
                 </div>
@@ -254,6 +249,31 @@ export function ServiceDetail() {
             </div>
 
             <div className="min-w-0 space-y-8">
+              <div className="rounded-2xl border border-blue-500/10 p-8">
+                <p className="font-display text-lg font-semibold text-ink-900">
+                  What we do
+                </p>
+                <p className="mt-3 text-sm leading-relaxed text-ink-900/70">
+                  {service.whatWeDo}
+                </p>
+              </div>
+
+              <div className="rounded-2xl border border-blue-500/10 p-8">
+                <p className="font-display text-lg font-semibold text-ink-900">
+                  Best for
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {service.bestFor.map((item) => (
+                    <span
+                      key={item}
+                      className="rounded-full bg-blue-500/5 px-3 py-1.5 text-xs font-medium text-ink-900/75 ring-1 ring-blue-500/15"
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
               <div className="rounded-2xl bg-paper-100 p-8 ring-1 ring-blue-500/10">
                 <p className="font-display text-lg font-semibold text-blue-600">
                   What is included
@@ -267,6 +287,17 @@ export function ServiceDetail() {
                   ))}
                 </ul>
               </div>
+
+              {service.principle && (
+                <div className="rounded-2xl bg-blue-500/5 p-8 ring-1 ring-blue-500/15">
+                  <p className="text-[10px] font-semibold tracking-[0.2em] text-blue-600 uppercase">
+                    {service.principle.label}
+                  </p>
+                  <p className="mt-3 text-sm leading-relaxed text-ink-900/70">
+                    {service.principle.text}
+                  </p>
+                </div>
+              )}
 
               <div className="rounded-2xl border border-blue-500/10 p-8">
                 <p className="font-display text-lg font-semibold text-ink-900">
@@ -311,7 +342,7 @@ export function ServiceDetail() {
                       {s.name}
                     </p>
                     <p className="mt-1 text-xs text-ink-900/50">
-                      ${s.price} / image · {s.delivery}
+                      {s.delivery}
                     </p>
                   </div>
                 </TiltCard>
