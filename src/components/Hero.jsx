@@ -1,40 +1,38 @@
 import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Timer, PlayCircle } from "@phosphor-icons/react";
+import { ArrowRight, Timer, PlayCircle, ShieldCheck } from "@phosphor-icons/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { photos } from "../data/images";
+import heroBackground from "../assets/hero-waterfront.jpg";
 import { whatsappLink } from "../data/site";
 import { useMagnetic } from "../hooks/useMagnetic";
 import { WordReveal } from "./WordReveal";
+import { CurvedUnderline } from "./CurvedUnderline";
+import { HeroDoodle } from "./HeroDoodle";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Shared with LoadingScreen.jsx - the loader's photographic frame reveals
-// this exact photo, so the handoff into the hero's own composition reuses
-// the same image rather than swapping to a different one.
-const MAIN_IMAGE = photos.pool[1];
-const SIDE_IMAGE = photos.bedroom[1];
-const BOTTOM_IMAGE = photos.bathroom[0];
-
 export function Hero({ reveal = true }) {
   const rootRef = useRef(null);
-  const mainImgRef = useRef(null);
+  const bgRef = useRef(null);
+  const textColRef = useRef(null);
+  const emphasisRef = useRef(null);
+  const eyebrowPhotoRef = useRef(null);
   const ctaRef = useMagnetic(0.2);
 
-  // Runs once on mount, independent of `reveal`: puts the text/image content
-  // in its hidden starting state immediately so nothing can flash visible
+  // Runs once on mount, independent of `reveal`: puts the text content in
+  // its hidden starting state immediately so nothing can flash visible
   // before the coordinated reveal plays.
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) return;
-    gsap.set([".hero-anim", ".hero-image-col"], { opacity: 0, y: 16 });
+    gsap.set(".hero-anim", { opacity: 0, y: 16 });
   }, []);
 
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) {
-      gsap.set([".hero-anim", ".hero-image-col"], { opacity: 1, y: 0 });
+      gsap.set(".hero-anim", { opacity: 1, y: 0 });
       return undefined;
     }
     if (!reveal) return undefined;
@@ -45,22 +43,24 @@ export function Hero({ reveal = true }) {
         .fromTo(".hero-sub", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.6 }, "-=0.1")
         .fromTo(".hero-cta", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.5 }, "-=0.3")
         .fromTo(
-          ".hero-image-col",
-          { opacity: 0, y: 24, scale: 0.98 },
-          { opacity: 1, y: 0, scale: 1, duration: 0.8 },
-          "-=0.5"
+          ".hero-card",
+          { opacity: 0, y: 16, scale: 0.96 },
+          { opacity: 1, y: 0, scale: 1, duration: 0.6 },
+          "-=0.15"
         );
     }, rootRef);
     return () => ctx.revert();
   }, [reveal]);
 
   useEffect(() => {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) return undefined;
     const ctx = gsap.context(() => {
-      // Slow, subtle Ken-Burns drift on the dominant collage image only -
-      // restrained, since it now sits inside a framed card rather than
-      // bleeding to the edges of the viewport.
+      // Slow, subtle Ken-Burns drift on the full-bleed background photo -
+      // restrained, since it now fills the entire hero rather than sitting
+      // inside a framed collage card.
       gsap.fromTo(
-        mainImgRef.current,
+        bgRef.current,
         { scale: 1.08 },
         {
           scale: 1.16,
@@ -73,16 +73,41 @@ export function Hero({ reveal = true }) {
   }, []);
 
   return (
-    <section id="home" ref={rootRef} className="relative isolate overflow-hidden bg-paper-50">
-      <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-4 py-14 sm:gap-12 sm:px-6 sm:py-24 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16 lg:px-8 lg:py-28">
-        {/* Left: eyebrow, headline, copy, CTAs. Mobile gets its own tighter
-            rhythm (smaller top margins, bigger headline, full-width primary
-            CTA, secondary link demoted and stacked below it) rather than a
-            shrunk copy of the desktop spacing - see
-            Kverra_Mobile_Homepage_Service_Page_Fixes.md. */}
-        <div className="relative z-10 min-w-0">
-          <p className="hero-anim hero-eyebrow text-xs font-semibold tracking-[0.3em] text-blue-600 uppercase">
-            Real Estate Photo Editing
+    <section id="home" ref={rootRef} className="relative isolate overflow-hidden bg-brand-950">
+      <img
+        ref={bgRef}
+        src={heroBackground}
+        alt="Waterfront property photographed for a real estate listing"
+        className="absolute inset-0 h-full w-full scale-[1.08] object-cover object-[78%_55%] sm:object-[68%_48%] lg:object-[58%_45%]"
+      />
+      {/* Soft, feathered white/cream glow behind the left-side copy - not a
+          panel or a flat scrim, it blends into the photograph with no hard
+          edge, fading to fully transparent well before the right half so the
+          property stays rich and photographic there. Dark text now sits
+          inside this lighter region instead of light text over a navy
+          scrim. Explicit percentage radii (relative to the hero box itself)
+          keep the bloom tall enough to reach from the eyebrow down through
+          the CTA row, rather than pooling tightly around just the headline. */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 54% 90% at 20% 46%, rgba(255,250,243,0.97) 0%, rgba(255,250,243,0.85) 26%, rgba(255,250,243,0.52) 52%, rgba(255,250,243,0) 80%)",
+        }}
+      />
+
+      {/* Mobile gets extra top padding (vs. a symmetric py-) so the whole
+          content stack - doodle, eyebrow, headline, paragraph, CTAs, and
+          the card, all centered together as one flex-col group - sits with
+          more breathing room from the viewport edge instead of reading as
+          pinned to the top. Both anchors (HeroDoodle, CurvedUnderline) are
+          positioned relative to textColRef, so they ride along with this
+          shift automatically; sm:py-20 restores the original symmetric
+          desktop padding untouched. */}
+      <div className="relative mx-auto flex min-h-[560px] max-w-7xl flex-col items-start justify-center gap-10 px-4 pt-24 pb-16 sm:min-h-[620px] sm:flex-row sm:items-center sm:justify-between sm:gap-8 sm:px-6 sm:py-20 lg:min-h-[760px] lg:px-8">
+        <div ref={textColRef} className="relative max-w-xl lg:max-w-2xl">
+          <p className="hero-anim hero-eyebrow text-sm font-semibold tracking-[0.3em] text-blue-600 uppercase">
+            Real Estate <span ref={eyebrowPhotoRef} className="inline-block">Photo</span> Editing
           </p>
           <WordReveal
             as="h1"
@@ -90,9 +115,18 @@ export function Hero({ reveal = true }) {
             trigger="load"
             play={reveal}
             delay={0.3}
-            className="mt-4 font-display text-[2.5rem] leading-[1.08] font-semibold tracking-tight text-ink-900 sm:mt-5 sm:text-5xl lg:text-[3.4rem]"
+            emphasize="Editing"
+            emphasisClassName="text-[#F05A3C] italic"
+            emphasisRef={emphasisRef}
+            className="mt-4 font-display text-[3rem] leading-[1.05] font-semibold tracking-tight text-ink-900 sm:mt-5 sm:text-[4.1rem] lg:text-[4.35rem]"
           />
-          <p className="hero-anim hero-sub mt-5 max-w-md text-base leading-relaxed text-secondary-500 sm:mt-6">
+          <HeroDoodle
+            targetRef={eyebrowPhotoRef}
+            containerRef={textColRef}
+            className="hero-anim hero-cta h-[60px] w-[150px] text-blue-600 sm:w-[170px]"
+          />
+          <CurvedUnderline targetRef={emphasisRef} containerRef={textColRef} play={reveal} />
+          <p className="hero-anim hero-sub mt-6 max-w-md text-base leading-relaxed text-secondary-500 sm:mt-7">
             Professional real estate photo editing services. Enhance your
             real estate photos with our <strong className="font-semibold text-ink-900">high-quality</strong>,{" "}
             <strong className="font-semibold text-ink-900">fast</strong>, and{" "}
@@ -127,38 +161,22 @@ export function Hero({ reveal = true }) {
           </p>
         </div>
 
-        {/* Right: premium multi-image composition - one dominant frame plus
-            two supporting frames, echoing how a listing itself is shot
-            (a hero room, a detail room, an amenity). Kept as a real 3-image
-            collage at every breakpoint, including mobile - a single-image
-            mobile fallback was tried and rejected (see
-            Kverra_Homepage_Hero_Layout_and_Content_Changes.md), only the
-            overall height/gap scale down below `sm:`. */}
-        <div className="hero-image-col relative min-w-0">
-          <div className="grid h-[340px] grid-cols-[1.6fr_1fr] grid-rows-[1.5fr_1fr] gap-3 sm:h-[440px] sm:gap-4 lg:h-[520px]">
-            <div className="relative col-start-1 row-start-1 overflow-hidden rounded-2xl shadow-2xl shadow-brand-900/15">
-              <img
-                ref={mainImgRef}
-                src={MAIN_IMAGE}
-                alt="Professionally edited living room with balanced light and true-to-life colour"
-                className="h-full w-full scale-[1.08] object-cover object-[center_32%]"
-              />
-            </div>
-            <div className="relative col-start-2 row-span-2 row-start-1 overflow-hidden rounded-2xl shadow-xl shadow-brand-900/10">
-              <img
-                src={SIDE_IMAGE}
-                alt="Bedroom retouched for even exposure and natural colour"
-                className="h-full w-full object-cover"
-              />
-            </div>
-            <div className="relative col-start-1 row-start-2 overflow-hidden rounded-2xl shadow-xl shadow-brand-900/10">
-              <img
-                src={BOTTOM_IMAGE}
-                alt="Bathroom retouched with clean, true-to-life colour"
-                className="h-full w-full object-cover"
-              />
-            </div>
+        {/* Small floating trust card - centered, compact composition
+            (icon+label, big stat, short supporting line, all centered, with
+            even gaps between each layer), built from a real,
+            already-published stat (see StatsBar) rather than an invented
+            discount or review. */}
+        <div className="hero-anim hero-card flex w-[220px] shrink-0 self-center flex-col items-center justify-center gap-2 rounded-[26px] bg-[#fffdf9] px-6 py-7 text-center shadow-2xl shadow-brand-950/25 ring-1 ring-black/5 sm:w-[230px] sm:self-auto sm:-rotate-2">
+          <div className="flex items-center gap-1.5">
+            <ShieldCheck size={16} weight="fill" className="text-blue-600" />
+            <p className="text-[10px] font-semibold tracking-[0.14em] text-ink-900/50 uppercase">
+              Reliable Delivery
+            </p>
           </div>
+          <p className="font-display text-5xl leading-none font-semibold text-blue-600">98%</p>
+          <p className="max-w-[170px] text-xs leading-snug text-ink-900/60">
+            Delivered on or ahead of schedule
+          </p>
         </div>
       </div>
     </section>

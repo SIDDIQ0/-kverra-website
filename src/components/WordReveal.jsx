@@ -13,6 +13,9 @@ export function WordReveal({
   text,
   emphasize,
   emphasisClassName = "text-blue-400 italic",
+  emphasisRef,
+  markWord,
+  markRef,
   as: Tag = "h2",
   className = "",
   trigger = "scroll",
@@ -68,6 +71,7 @@ export function WordReveal({
 
   const words = text.split(" ");
   let emphasisUsed = false;
+  let markUsed = false;
 
   return (
     <Tag ref={ref} className={className}>
@@ -76,9 +80,14 @@ export function WordReveal({
         const isEmphasis =
           !emphasisUsed && emphasize && clean.toLowerCase() === emphasize.toLowerCase();
         if (isEmphasis) emphasisUsed = true;
+        const isMarked = !markUsed && markWord && clean.toLowerCase() === markWord.toLowerCase();
+        if (isMarked) markUsed = true;
         return (
           <span key={i} className="inline-block overflow-hidden pb-1 align-bottom">
-            <span className={`word-inner inline-block ${isEmphasis ? emphasisClassName : ""}`}>
+            <span
+              ref={isEmphasis ? emphasisRef : isMarked ? markRef : undefined}
+              className={`word-inner inline-block ${isEmphasis ? emphasisClassName : ""}`}
+            >
               {word}
               {i < words.length - 1 ? " " : ""}
             </span>

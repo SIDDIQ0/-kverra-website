@@ -2,14 +2,14 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { Flip } from "gsap/Flip";
 import logoMark from "../assets/kverra-logo-mark.png";
-import { photos } from "../data/images";
+import heroBackground from "../assets/hero-waterfront.jpg";
 
 gsap.registerPlugin(Flip);
 
-// Same source and crop as Hero.jsx's HERO_IMAGE - the loader reveals this
+// Same source as Hero.jsx's background photo - the loader reveals this
 // exact photo, so the fullscreen takeover hands off into the hero without
 // the underlying image ever visibly changing.
-const LOADER_IMAGE = photos.pool[1];
+const LOADER_IMAGE = heroBackground;
 
 const RAW_FILTER = "brightness(0.85) contrast(0.82) saturate(0.5) blur(1px)";
 const FINAL_FILTER = "brightness(1.03) contrast(1.07) saturate(1.06) blur(0px)";
@@ -161,7 +161,7 @@ export function LoadingScreen({ onFinish, onReveal }) {
           src={LOADER_IMAGE}
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 h-full w-full object-cover object-[center_32%] sm:object-[center_40%]"
+          className="absolute inset-0 h-full w-full object-cover object-[70%_45%] sm:object-[65%_42%]"
           style={{ filter: RAW_FILTER }}
         />
         <img
@@ -169,7 +169,7 @@ export function LoadingScreen({ onFinish, onReveal }) {
           src={LOADER_IMAGE}
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 h-full w-full object-cover object-[center_32%] sm:object-[center_40%]"
+          className="absolute inset-0 h-full w-full object-cover object-[70%_45%] sm:object-[65%_42%]"
           style={{ filter: FINAL_FILTER }}
         />
 
